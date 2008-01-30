@@ -6,13 +6,15 @@
 	<groupId>net.sf.springderby</groupId>
 	<artifactId>spring-derby</artifactId>
 	<version>SNAPSHOT</version>
-	<name>Spring Derby integration</name>
+	<name>Spring Derby</name>
 	<packaging>jar</packaging>
+	
 	<properties>
 		<spring.version>1.2.8</spring.version>
 		<!-- ij.runScript only exists beginning with this version of Derby -->
 		<derby.version>10.2.1.6</derby.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -35,4 +37,47 @@
 			<version>${derby.version}</version>
 		</dependency>
 	</dependencies>
+	
+	<reporting>
+		<plugins>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</reporting>
+	
+	<inceptionYear>2008</inceptionYear>
+	
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	
+	<scm>
+		<connection>scm:svn:https://spring-derby.svn.sourceforge.net/svnroot/spring-derby</connection>
+		<developerConnection>scm:svn:https://spring-derby.svn.sourceforge.net/svnroot/spring-derby</developerConnection>
+		<url>http://spring-derby.svn.sourceforge.net/viewvc/spring-derby/</url>
+	</scm>
+	
+	<developers>
+		<developer>
+			<name>Andreas Veithen</name>
+			<id>veithen</id>
+			<email>andreas DOT veithen AT skynet DOT be</email>
+			<url>http://www.ohloh.net/accounts/12757</url>
+		</developer>
+	</developers>
+	
+	<issueManagement>
+		<url>http://sourceforge.net/tracker/?group_id=216129&amp;atid=1036447</url>
+	</issueManagement>
+	
+	<distributionManagement>
+		<site>
+			<url>scp://shell.sf.net/home/groups/s/sp/spring-derby/htdocs/</url>
+		</site>
+	</distributionManagement>
 </project>
