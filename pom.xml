@@ -57,9 +57,9 @@
 	</licenses>
 	
 	<scm>
-		<connection>scm:svn:https://spring-derby.svn.sourceforge.net/svnroot/spring-derby</connection>
-		<developerConnection>scm:svn:https://spring-derby.svn.sourceforge.net/svnroot/spring-derby</developerConnection>
-		<url>http://spring-derby.svn.sourceforge.net/viewvc/spring-derby/</url>
+		<connection>scm:svn:http://spring-derby.svn.sourceforge.net/svnroot/spring-derby/trunk</connection>
+		<developerConnection>scm:svn:https://spring-derby.svn.sourceforge.net/svnroot/spring-derby/trunk</developerConnection>
+		<url>http://spring-derby.svn.sourceforge.net/viewvc/spring-derby/trunk/</url>
 	</scm>
 	
 	<developers>
