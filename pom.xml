@@ -82,7 +82,7 @@
 		</site>
 		<!-- Use "mvn deploy" to upload -->
 		<snapshotRepository>
-			<url>scp://shell.sf.net/home/groups/s/sp/spring-derby/htdocs/repository/</url>
+			<url>scpexe://shell.sf.net/home/groups/s/sp/spring-derby/htdocs/repository/</url>
 		</snapshotRepository>
 	</distributionManagement>
 </project>
