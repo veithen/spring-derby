@@ -1,17 +1,28 @@
 package net.sf.springderby;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.derby.jdbc.EmbeddedDataSource;
 import org.apache.derby.tools.ij;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBean, FactoryBean {
+	private final Log log = LogFactory.getLog(EmbeddedDataSourceFactory.class);
+	
 	private boolean create;
 	
 	private String databaseName;
@@ -49,14 +60,34 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 		if (schemaCreationScripts != null) {
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 			if (jdbcTemplate.queryForInt("SELECT COUNT(*) FROM SYS.SYSSCHEMAS WHERE SCHEMANAME=?", new Object[] { user.toUpperCase() }) == 0) {
-				
-				for (Iterator it = schemaCreationScripts.iterator(); it.hasNext(); ) {
-					Resource scriptResource = (Resource)it.next();
-					
-					
-				}
-				// runScript returns the number of SQLExceptions thrown during the execution
-				ij.runScript(arg0, arg1, arg2, arg3, arg4);
+				jdbcTemplate.execute(new ConnectionCallback() {
+					public Object doInConnection(Connection connection) throws SQLException, DataAccessException {
+						for (Iterator it = schemaCreationScripts.iterator(); it.hasNext(); ) {
+							Resource resource = (Resource)it.next();
+							try {
+								InputStream in = resource.getInputStream();
+								try {
+									ByteArrayOutputStream out = new ByteArrayOutputStream();
+									try {
+										// runScript returns the number of SQLExceptions thrown during the execution
+										// TODO: handle error conditions
+										ij.runScript(connection, in, scriptEncoding, out, "UTF-8");
+									}
+									finally {
+										log.info(new String(out.toByteArray(), "UTF-8"));
+									}
+								}
+								finally {
+									in.close();
+								}
+							}
+							catch (IOException ex) {
+								throw new Error(ex); // TODO: define DataAccessException
+							}
+						}
+						return null;
+					}
+				});
 			}
 		}
 	}
