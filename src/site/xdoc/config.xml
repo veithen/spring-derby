@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<document>
+	<properties>
+		<title>Configuration</title>
+	</properties>
+	<body>
+	<pre><![CDATA[
+<bean id="dataSource" class="net.sf.springderby.EmbeddedDataSourceFactory">
+	<property name="databaseName" value="/var/myapp/db"/>
+	<property name="user" value="myuser"/>
+	<property name="create" value="true"/>
+	<property name="schemaCreationScripts">
+		<list value-type="org.springframework.core.io.Resource">
+			<value>classpath:/myapp/database/create_schema.sql</value>
+		</list>
+	</property>
+</bean>
+	]]></pre>
+	</body>
+</document>
