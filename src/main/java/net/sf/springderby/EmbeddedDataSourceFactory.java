@@ -82,8 +82,9 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 									LoggerOutputStream out = new LoggerOutputStream(log, "UTF-8");
 									try {
 										// runScript returns the number of SQLExceptions thrown during the execution
-										// TODO: handle error conditions
-										ij.runScript(connection, in, scriptEncoding, out, "UTF-8");
+										if (ij.runScript(connection, in, scriptEncoding, out, "UTF-8") > 0) {
+											throw new SchemaCreationException("Script " + resource.getFilename() + " executed with errors");
+										}
 									}
 									finally {
 										out.close();
@@ -94,7 +95,7 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 								}
 							}
 							catch (IOException ex) {
-								throw new Error(ex); // TODO: define DataAccessException
+								throw new SchemaCreationException("Failed to read script " + resource.getFilename(), ex);
 							}
 						}
 						return null;
