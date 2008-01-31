@@ -13,7 +13,6 @@
  */
 package net.sf.springderby;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -80,14 +79,14 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 							try {
 								InputStream in = resource.getInputStream();
 								try {
-									ByteArrayOutputStream out = new ByteArrayOutputStream();
+									LoggerOutputStream out = new LoggerOutputStream(log, "UTF-8");
 									try {
 										// runScript returns the number of SQLExceptions thrown during the execution
 										// TODO: handle error conditions
 										ij.runScript(connection, in, scriptEncoding, out, "UTF-8");
 									}
 									finally {
-										log.info(new String(out.toByteArray(), "UTF-8"));
+										out.close();
 									}
 								}
 								finally {
