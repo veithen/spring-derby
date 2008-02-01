@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
  * 
  * @author Andreas Veithen
  */
+// TODO: strip trailing '\r' on Windows platforms
 public class LoggerOutputStream extends OutputStream {
 	private final Log log;
 	private final String charset;
