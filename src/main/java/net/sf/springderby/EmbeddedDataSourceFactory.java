@@ -32,6 +32,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+// TODO: check that when schema creation fails, the database is shut down (i.e. destroy is called)
 public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBean, FactoryBean {
 	private final Log log = LogFactory.getLog(EmbeddedDataSourceFactory.class);
 	
@@ -69,6 +70,7 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 		if (create) {
 			dataSource.setCreateDatabase("create");
 		}
+		dataSource.setUser(user);
 		if (schemaCreationScripts != null) {
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 			if (jdbcTemplate.queryForInt("SELECT COUNT(*) FROM SYS.SYSSCHEMAS WHERE SCHEMANAME=?", new Object[] { user.toUpperCase() }) == 0) {
@@ -108,6 +110,7 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 	public void destroy() throws Exception {
 		dataSource.setShutdownDatabase("shutdown");
 		// getConnection must be called to actually perform the shutdown
+		// TODO: this instruction always throws an exception; catch it and check exception type
 		dataSource.getConnection();
 	}
 
