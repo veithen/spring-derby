@@ -13,10 +13,14 @@
  */
 package net.sf.springderby;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CoderResult;
 
 import org.apache.commons.logging.Log;
 
@@ -28,27 +32,29 @@ import org.apache.commons.logging.Log;
 // TODO: strip trailing '\r' on Windows platforms
 public class LoggerOutputStream extends OutputStream {
 	private final Log log;
-	private final String charset;
-	private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+	private final CharsetDecoder decoder;
+	private final ByteBuffer decoderIn = ByteBuffer.allocate(128);
+	private final CharBuffer decoderOut = CharBuffer.allocate(128);
+	private final StringBuffer lineBuffer = new StringBuffer();
 	
-	public LoggerOutputStream(Log log, String charset) {
+	public LoggerOutputStream(Log log, Charset charset) {
 		this.log = log;
-		this.charset = charset;
+		decoder = charset.newDecoder();
 	}
 
-	public void write(byte[] bytes, int off, int len) throws IOException {
-		int start = off;
-		while (len > 0) {
-			byte b = bytes[off];
-			if (b == '\n') {
-				buffer.write(bytes, start, off-start);
-				flushBuffer();
-				start = off+1;
-			}
-			off++;
-			len--;
+	public LoggerOutputStream(Log log, String charset) {
+		this(log, Charset.forName(charset));
+	}
+
+	public void write(byte[] bytes, int offset, int length) throws IOException {
+		while (length > 0) {
+			int c = Math.min(length, decoderIn.remaining());
+			decoderIn.put(bytes, offset, c).flip();
+			processInput(false);
+			decoderIn.compact();
+			length -= c;
+			offset += c;
 		}
-		buffer.write(bytes, start, off-start);
 	}
 
 	public void write(byte[] bytes) throws IOException {
@@ -60,11 +66,36 @@ public class LoggerOutputStream extends OutputStream {
 	}
 	
 	public void close() throws IOException {
-		flushBuffer();
+		processInput(true);
+		if (lineBuffer.length() > 0) {
+			flushLineBuffer();
+		}
 	}
-
-	private void flushBuffer() throws UnsupportedEncodingException {
-		log.info(new String(buffer.toByteArray(), charset));
-		buffer.reset();
+	
+	private void processInput(boolean endOfInput) throws IOException {
+		CoderResult coderResult;
+		do {
+			coderResult = decoder.decode(decoderIn, decoderOut, endOfInput);
+			if (coderResult.isError()) {
+				throw new IOException("Character set decoding error: " + coderResult);
+			}
+			int outLength = decoderOut.position();
+			char[] outArray = decoderOut.array();
+			int start = 0;
+			for (int i=0; i<outLength; i++) {
+				if (outArray[i] == '\n') {
+					lineBuffer.append(outArray, start, i-start);
+					flushLineBuffer();
+					start = i+1;
+				}
+			}
+			lineBuffer.append(outArray, start, outLength-start);
+			decoderOut.rewind();
+		} while (coderResult.isOverflow());
+	}
+	
+	private void flushLineBuffer() throws UnsupportedEncodingException {
+		log.info(lineBuffer.toString());
+		lineBuffer.setLength(0);
 	}
 }
