@@ -11,7 +11,11 @@
 --  limitations under the License.
 
 --
---  Script that declares functions emulating DB2 date/time functions.
+--  Script that declares functions emulating DB2 date/time functions. Note
+--  that the DB2 functions accept DATE, TIMESTAMP and CHAR values, whereas
+--  the emulation functions only accept DATE values. In accordance with the
+--  DB2 behaviour, all functions are defined to return NULL if the
+--  argument is NULL.
 --
 --  $Id$
 --

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="dataSource" class="net.sf.springderby.EmbeddedDataSourceFactory">
+		<property name="databaseName" value="target/testdb"/>
+		<property name="user" value="test"/>
+		<property name="create" value="true"/>
+		<property name="beforeStartupActions">
+			<list>
+				<bean class="net.sf.springderby.DeleteDatabaseAction"/>
+			</list>
+		</property>
+		<property name="schemaCreationScripts">
+			<list>
+				<value type="org.springframework.core.io.Resource">classpath:/net/sf/springderby/scripts/db2datetime.sql</value>
+			</list>
+		</property>
+		<property name="afterShutdownActions">
+			<list>
+				<bean class="net.sf.springderby.DeleteDatabaseAction"/>
+			</list>
+		</property>
+	</bean>
+</beans>

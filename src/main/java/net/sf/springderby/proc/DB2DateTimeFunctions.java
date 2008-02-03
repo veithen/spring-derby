@@ -34,19 +34,14 @@ public class DB2DateTimeFunctions {
 	 * <blockquote>
 	 * The DAYOFWEEK function returns an integer in the range of 1 to 7 that represents the
 	 * day of the week where 1 is Sunday and 7 is Saturday.
-	 * [...] if the argument is null, the result is the null value.
 	 * </blockquote>
 	 * @param date the date value
-	 * @return the day of the week or <code>null</code> if <code>date</code> is <code>null</code>
+	 * @return the day of the week
 	 */
-	public static Integer dayOfWeek(Date date) {
-		if (date == null) {
-			return null;
-		} else {
-			GregorianCalendar calendar = new GregorianCalendar();
-			calendar.setTime(date);
-			return new Integer(calendar.get(Calendar.DAY_OF_WEEK));
-		}
+	public static int dayOfWeek(Date date) {
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		return calendar.get(Calendar.DAY_OF_WEEK);
 	}
 	
 	/**
@@ -55,19 +50,14 @@ public class DB2DateTimeFunctions {
 	 * <blockquote>
 	 * The DAYOFWEEK_ISO function returns an integer in the range of 1 to 7 that
 	 * represents the day of the week, where 1 is Monday and 7 is Sunday.
-	 * [...] if the argument is null, the result is the null value.
 	 * @param date the date value
-	 * @return the day of the week or <code>null</code> if <code>date</code> is <code>null</code>
+	 * @return the day of the week
 	 */
-	public static Integer dayOfWeekIso(Date date) {
-		if (date == null) {
-			return null;
-		} else {
-			GregorianCalendar calendar = new GregorianCalendar();
-			calendar.setTime(date);
-			int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-			return new Integer(dayOfWeek == 1 ? 7 : dayOfWeek-1);
-		}
+	public static int dayOfWeekIso(Date date) {
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+		return dayOfWeek == 1 ? 7 : dayOfWeek-1;
 	}
 	
 	/**
@@ -76,19 +66,14 @@ public class DB2DateTimeFunctions {
 	 * <blockquote>
 	 * The DAYOFYEAR function returns an integer in the range of 1 to 366 that
 	 * represents the day of the year where 1 is January 1.
-	 * [...] if the argument is null, the result is the null value.
 	 * </blockquote>
 	 * @param date the date value
-	 * @return the day of the year or <code>null</code> if <code>date</code> is <code>null</code>
+	 * @return the day of the year
 	 */
-	public static Integer dayOfYear(Date date) {
-		if (date == null) {
-			return null;
-		} else {
-			GregorianCalendar calendar = new GregorianCalendar();
-			calendar.setTime(date);
-			return new Integer(calendar.get(Calendar.DAY_OF_YEAR));
-		}
+	public static int dayOfYear(Date date) {
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		return calendar.get(Calendar.DAY_OF_YEAR);
 	}
 	
 	/**
@@ -97,22 +82,17 @@ public class DB2DateTimeFunctions {
 	 * <blockquote>
 	 * The LAST_DAY scalar function returns a date that represents the last day
 	 * of the month of the date argument.
-	 * [...] if the value of date-expression is null, the result is the null value.
 	 * </blockquote>
 	 * @param date the date value
-	 * @return the last day of the month or <code>null</code> if <code>date</code> is <code>null</code>
+	 * @return the last day of the month
 	 */
 	public static Date lastDay(Date date) {
-		if (date == null) {
-			return null;
-		} else {
-			GregorianCalendar calendar = new GregorianCalendar();
-			calendar.setTime(date);
-			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			calendar.add(Calendar.MONTH, 1);
-			calendar.add(Calendar.DAY_OF_MONTH, -1);
-			return new Date(calendar.getTimeInMillis());
-		}
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		calendar.add(Calendar.MONTH, 1);
+		calendar.add(Calendar.DAY_OF_MONTH, -1);
+		return new Date(calendar.getTimeInMillis());
 	}
 	
 	/**
@@ -121,21 +101,16 @@ public class DB2DateTimeFunctions {
 	 * <blockquote>
 	 * The WEEK function returns an integer in the range of 1 to 54 that represents the week
 	 * of the year. The week starts with Sunday, and January 1 is always in the first week.
-	 * [...] if the argument is null, the result is the null value.
 	 * </blockquote>
 	 * @param date the date value
-	 * @return the week of the year or <code>null</code> if <code>date</code> was <code>null</code>
+	 * @return the week of the year
 	 */
-	public static Integer week(Date date) {
-		if (date == null) {
-			return null;
-		} else {
-			GregorianCalendar calendar = new GregorianCalendar();
-			calendar.setTime(date);
-			calendar.setFirstDayOfWeek(Calendar.SUNDAY);
-			calendar.setMinimalDaysInFirstWeek(1);
-			return new Integer(calendar.get(Calendar.WEEK_OF_YEAR));
-		}
+	public static int week(Date date) {
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+		calendar.setMinimalDaysInFirstWeek(1);
+		return calendar.get(Calendar.WEEK_OF_YEAR);
 	}
 	
 	/**
@@ -148,20 +123,15 @@ public class DB2DateTimeFunctions {
 	 * January 4. Thus, it is possible to have up to 3 days at the beginning of the year appear
 	 * as the last week of the previous year, or to have up to 3 days at the end of a year
 	 * appear as the first week of the next year.
-	 * [...] if the argument is null, the result is the null value.
 	 * </blockquote>
 	 * @param date the date value
-	 * @return the week of the year or <code>null</code> if <code>date</code> was <code>null</code>
+	 * @return the week of the year
 	 */
-	public static Integer weekIso(Date date) {
-		if (date == null) {
-			return null;
-		} else {
-			GregorianCalendar calendar = new GregorianCalendar();
-			calendar.setTime(date);
-			calendar.setFirstDayOfWeek(Calendar.MONDAY);
-			calendar.setMinimalDaysInFirstWeek(4);
-			return new Integer(calendar.get(Calendar.WEEK_OF_YEAR));
-		}
+	public static int weekIso(Date date) {
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		calendar.setFirstDayOfWeek(Calendar.MONDAY);
+		calendar.setMinimalDaysInFirstWeek(4);
+		return calendar.get(Calendar.WEEK_OF_YEAR);
 	}
 }
