@@ -129,9 +129,19 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 
 	public void destroy() throws Exception {
 		dataSource.setShutdownDatabase("shutdown");
-		// getConnection must be called to actually perform the shutdown
-		// TODO: this instruction always throws an exception; catch it and check exception type
-		dataSource.getConnection();
+		// getConnection must be called to actually perform the shutdown. Note that this 
+		// instruction always throws an exception. We therefore catch SQLExceptions and check
+		// for the expected exception type.
+		try {
+			dataSource.getConnection();
+		}
+		catch (SQLException ex) {
+			if ("08006".equals(ex.getSQLState())) {
+				log.info(ex.getMessage());
+			} else {
+				throw ex;
+			}
+		}
 		executeOfflineActions(afterShutdownActions);
 	}
 
