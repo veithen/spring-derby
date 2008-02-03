@@ -30,5 +30,17 @@ public class LoggerOutputStreamTest extends TestCase {
 		for (int i=0; i<testStrings.length; i++) {
 			assertEquals(testStrings[i], log.pop());
 		}
+		assertFalse(log.hasMessages());
+	}
+	
+	public void testNoEndOfLine() throws Exception {
+		TestLog log = new TestLog();
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(new LoggerOutputStream(log, "UTF-8"), "UTF-8"), false);
+		out.print("TEST1\n");
+		out.print("TEST2");
+		out.close();
+		assertEquals("TEST1", log.pop());
+		assertEquals("TEST2", log.pop());
+		assertFalse(log.hasMessages());
 	}
 }

@@ -18,4 +18,8 @@ public class TestLog extends SimpleLog {
 	public Object pop() {
 		return messages.removeFirst();
 	}
+	
+	public boolean hasMessages() {
+		return !messages.isEmpty();
+	}
 }

@@ -49,9 +49,8 @@ public class LoggerOutputStream extends OutputStream {
 	public void write(byte[] bytes, int offset, int length) throws IOException {
 		while (length > 0) {
 			int c = Math.min(length, decoderIn.remaining());
-			decoderIn.put(bytes, offset, c).flip();
+			decoderIn.put(bytes, offset, c);
 			processInput(false);
-			decoderIn.compact();
 			length -= c;
 			offset += c;
 		}
@@ -73,6 +72,7 @@ public class LoggerOutputStream extends OutputStream {
 	}
 	
 	private void processInput(boolean endOfInput) throws IOException {
+		decoderIn.flip();
 		CoderResult coderResult;
 		do {
 			coderResult = decoder.decode(decoderIn, decoderOut, endOfInput);
@@ -92,6 +92,7 @@ public class LoggerOutputStream extends OutputStream {
 			lineBuffer.append(outArray, start, outLength-start);
 			decoderOut.rewind();
 		} while (coderResult.isOverflow());
+		decoderIn.compact();
 	}
 	
 	private void flushLineBuffer() throws UnsupportedEncodingException {
