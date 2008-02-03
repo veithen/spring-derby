@@ -28,26 +28,36 @@ import org.apache.commons.logging.Log;
  * 
  * @author Andreas Veithen
  */
-// TODO: strip trailing '\r' on Windows platforms
 public class LoggerOutputStream extends OutputStream {
 	private final Log log;
 	private final CharsetDecoder decoder;
+	private final String endOfLine;
 	private final ByteBuffer decoderIn = ByteBuffer.allocate(128);
 	private final CharBuffer decoderOut = CharBuffer.allocate(128);
 	private final StringBuffer lineBuffer = new StringBuffer();
+	private int endOfLineMatch;
 	
-	public LoggerOutputStream(Log log, Charset charset) {
+	public LoggerOutputStream(Log log, Charset charset, String endOfLine) {
 		this.log = log;
 		decoder = charset.newDecoder();
 		decoder.onMalformedInput(CodingErrorAction.REPLACE);
 		decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
 		decoder.replaceWith("?");
+		this.endOfLine = endOfLine;
 	}
 
+	public LoggerOutputStream(Log log, Charset charset) {
+		this(log, charset, System.getProperty( "line.separator" ));
+	}
+
+	public LoggerOutputStream(Log log, String charset, String endOfLine) {
+		this(log, Charset.forName(charset), endOfLine);
+	}
+	
 	public LoggerOutputStream(Log log, String charset) {
 		this(log, Charset.forName(charset));
 	}
-
+	
 	public void write(byte[] bytes, int offset, int length) {
 		while (length > 0) {
 			int c = Math.min(length, decoderIn.remaining());
@@ -84,10 +94,17 @@ public class LoggerOutputStream extends OutputStream {
 			char[] outArray = decoderOut.array();
 			int start = 0;
 			for (int i=0; i<outLength; i++) {
-				if (outArray[i] == '\n') {
-					lineBuffer.append(outArray, start, i-start);
-					flushLineBuffer();
-					start = i+1;
+				if (outArray[i] == endOfLine.charAt(endOfLineMatch)) {
+					endOfLineMatch++;
+					if (endOfLineMatch == endOfLine.length()) {
+						lineBuffer.append(outArray, start, i-start+1);
+						lineBuffer.setLength(lineBuffer.length()-endOfLine.length());
+						flushLineBuffer();
+						start = i+1;
+						endOfLineMatch = 0;
+					}
+				} else {
+					endOfLineMatch = 0;
 				}
 			}
 			lineBuffer.append(outArray, start, outLength-start);

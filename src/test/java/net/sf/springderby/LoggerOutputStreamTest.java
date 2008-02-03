@@ -19,12 +19,12 @@ public class LoggerOutputStreamTest extends TestCase {
 			"Nulla ultrices vestibulum quam."
 		};
 	
-	public void test() throws Exception {
+	public void testEndOfLine(String endOfLine) throws Exception {
 		TestLog log = new TestLog();
-		PrintWriter out = new PrintWriter(new OutputStreamWriter(new LoggerOutputStream(log, "UTF-8"), "UTF-8"), false);
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(new LoggerOutputStream(log, "UTF-8", endOfLine), "UTF-8"), false);
 		for (int i=0; i<testStrings.length; i++) {
 			out.print(testStrings[i]);
-			out.print("\n");
+			out.print(endOfLine);
 		}
 		out.close();
 		for (int i=0; i<testStrings.length; i++) {
@@ -33,9 +33,17 @@ public class LoggerOutputStreamTest extends TestCase {
 		assertFalse(log.hasMessages());
 	}
 	
-	public void testNoEndOfLine() throws Exception {
+	public void testUnixEndOfLine() throws Exception {
+		testEndOfLine("\n");
+	}
+	
+	public void testWindowsEndOfLine() throws Exception {
+		testEndOfLine("\r\n");
+	}
+	
+	public void testNoEndOfLineOnLastLine() throws Exception {
 		TestLog log = new TestLog();
-		PrintWriter out = new PrintWriter(new OutputStreamWriter(new LoggerOutputStream(log, "UTF-8"), "UTF-8"), false);
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(new LoggerOutputStream(log, "UTF-8", "\n"), "UTF-8"), false);
 		out.print("TEST1\n");
 		out.print("TEST2");
 		out.close();
@@ -46,7 +54,7 @@ public class LoggerOutputStreamTest extends TestCase {
 	
 	public void testUndecodable() throws Exception {
 		TestLog log = new TestLog();
-		LoggerOutputStream out = new LoggerOutputStream(log, "ASCII");
+		LoggerOutputStream out = new LoggerOutputStream(log, "ASCII", "\n");
 		out.write(new byte[] { 'A', -1, 'B', '\n' });
 		out.close();
 		assertEquals("A?B", log.pop());
