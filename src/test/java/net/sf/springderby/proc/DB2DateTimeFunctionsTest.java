@@ -44,6 +44,14 @@ public class DB2DateTimeFunctionsTest extends TestCase {
 			assertEquals(52, jdbcTemplate.queryForInt("SELECT WEEK_ISO(CAST('2005-12-31' AS DATE)) FROM SYSIBM.SYSDUMMY1"));
 			assertEquals(52, jdbcTemplate.queryForInt("SELECT WEEK_ISO(CAST('2006-01-01' AS DATE)) FROM SYSIBM.SYSDUMMY1"));
 			assertEquals(1, jdbcTemplate.queryForInt("SELECT WEEK_ISO(CAST('2006-01-03' AS DATE)) FROM SYSIBM.SYSDUMMY1"));
+			
+			// Other tests
+			assertEquals(1, jdbcTemplate.queryForInt("SELECT DAYOFWEEK_ISO(CAST('2008-01-28' AS DATE)) FROM SYSIBM.SYSDUMMY1"));
+			assertEquals(260, jdbcTemplate.queryForInt("SELECT DAYOFYEAR(CAST('2007-09-17' AS DATE)) FROM SYSIBM.SYSDUMMY1"));
+			assertEquals(366, jdbcTemplate.queryForInt("SELECT DAYOFYEAR(CAST('2008-12-31' AS DATE)) FROM SYSIBM.SYSDUMMY1"));
+			assertEquals(1, jdbcTemplate.queryForInt("SELECT WEEK(CAST('2008-01-01' AS DATE)) FROM SYSIBM.SYSDUMMY1"));
+			assertEquals(1, jdbcTemplate.queryForInt("SELECT WEEK(CAST('2008-01-05' AS DATE)) FROM SYSIBM.SYSDUMMY1"));
+			assertEquals(2, jdbcTemplate.queryForInt("SELECT WEEK(CAST('2008-01-06' AS DATE)) FROM SYSIBM.SYSDUMMY1"));
 		}
 		finally {
 			context.destroy();
