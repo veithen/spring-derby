@@ -13,6 +13,7 @@
  */
 package net.sf.springderby;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -40,8 +41,10 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 	
 	private String databaseName;
 	private String user;
+	private List/*<OfflineAction>*/ beforeStartupActions;
 	private String scriptEncoding = "UTF-8";
 	private List schemaCreationScripts;
+	private List/*<OfflineAction>*/ afterShutdownActions;
 	private EmbeddedDataSource dataSource;
 	
 	public void setDatabaseName(String databaseName) {
@@ -56,6 +59,10 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 		this.create = create;
 	}
 
+	public void setBeforeStartupActions(List beforeStartupActions) {
+		this.beforeStartupActions = beforeStartupActions;
+	}
+
 	public void setScriptEncoding(String scriptEncoding) {
 		this.scriptEncoding = scriptEncoding;
 	}
@@ -64,7 +71,20 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 		this.schemaCreationScripts = schemaCreationScripts;
 	}
 
+	public void setAfterShutdownActions(List afterShutdownActions) {
+		this.afterShutdownActions = afterShutdownActions;
+	}
+	
+	private void executeOfflineActions(List/*<OfflineAction>*/ actions) throws Exception {
+		if (actions != null) {
+			for (Iterator it = actions.iterator(); it.hasNext();) {
+				((OfflineAction)it.next()).execute(new File(databaseName));
+			}
+		}
+	}
+	
 	public void afterPropertiesSet() throws Exception {
+		executeOfflineActions(beforeStartupActions);
 		dataSource = new EmbeddedDataSource();
 		dataSource.setDatabaseName(databaseName);
 		if (create) {
@@ -112,6 +132,7 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 		// getConnection must be called to actually perform the shutdown
 		// TODO: this instruction always throws an exception; catch it and check exception type
 		dataSource.getConnection();
+		executeOfflineActions(afterShutdownActions);
 	}
 
 	public Class getObjectType() {
