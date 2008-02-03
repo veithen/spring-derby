@@ -43,4 +43,12 @@ public class LoggerOutputStreamTest extends TestCase {
 		assertEquals("TEST2", log.pop());
 		assertFalse(log.hasMessages());
 	}
+	
+	public void testUndecodable() throws Exception {
+		TestLog log = new TestLog();
+		LoggerOutputStream out = new LoggerOutputStream(log, "ASCII");
+		out.write(new byte[] { 'A', -1, 'B', '\n' });
+		out.close();
+		assertEquals("A?B", log.pop());
+	}
 }

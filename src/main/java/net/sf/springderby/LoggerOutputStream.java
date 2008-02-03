@@ -13,14 +13,13 @@
  */
 package net.sf.springderby;
 
-import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
+import java.nio.charset.CodingErrorAction;
 
 import org.apache.commons.logging.Log;
 
@@ -40,13 +39,16 @@ public class LoggerOutputStream extends OutputStream {
 	public LoggerOutputStream(Log log, Charset charset) {
 		this.log = log;
 		decoder = charset.newDecoder();
+		decoder.onMalformedInput(CodingErrorAction.REPLACE);
+		decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
+		decoder.replaceWith("?");
 	}
 
 	public LoggerOutputStream(Log log, String charset) {
 		this(log, Charset.forName(charset));
 	}
 
-	public void write(byte[] bytes, int offset, int length) throws IOException {
+	public void write(byte[] bytes, int offset, int length) {
 		while (length > 0) {
 			int c = Math.min(length, decoderIn.remaining());
 			decoderIn.put(bytes, offset, c);
@@ -56,29 +58,28 @@ public class LoggerOutputStream extends OutputStream {
 		}
 	}
 
-	public void write(byte[] bytes) throws IOException {
+	public void write(byte[] bytes) {
 		write(bytes, 0, bytes.length);
 	}
 
-	public void write(int b) throws IOException {
+	public void write(int b) {
 		write(new byte[] { (byte)b }, 0, 1);
 	}
 	
-	public void close() throws IOException {
+	public void close() {
 		processInput(true);
 		if (lineBuffer.length() > 0) {
 			flushLineBuffer();
 		}
 	}
 	
-	private void processInput(boolean endOfInput) throws IOException {
+	private void processInput(boolean endOfInput) {
 		decoderIn.flip();
 		CoderResult coderResult;
 		do {
 			coderResult = decoder.decode(decoderIn, decoderOut, endOfInput);
-			if (coderResult.isError()) {
-				throw new IOException("Character set decoding error: " + coderResult);
-			}
+			// The decoder is configured to replace malformed input and unmappable characters
+			assert !coderResult.isError();
 			int outLength = decoderOut.position();
 			char[] outArray = decoderOut.array();
 			int start = 0;
@@ -95,7 +96,7 @@ public class LoggerOutputStream extends OutputStream {
 		decoderIn.compact();
 	}
 	
-	private void flushLineBuffer() throws UnsupportedEncodingException {
+	private void flushLineBuffer() {
 		log.info(lineBuffer.toString());
 		lineBuffer.setLength(0);
 	}
