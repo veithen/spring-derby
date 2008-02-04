@@ -33,7 +33,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-// TODO: check that when schema creation fails, the database is shut down (i.e. destroy is called)
 public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBean, FactoryBean {
 	private final Log log = LogFactory.getLog(EmbeddedDataSourceFactory.class);
 	
@@ -94,40 +93,49 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 		if (schemaCreationScripts != null) {
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 			if (jdbcTemplate.queryForInt("SELECT COUNT(*) FROM SYS.SYSSCHEMAS WHERE SCHEMANAME=?", new Object[] { user.toUpperCase() }) == 0) {
-				jdbcTemplate.execute(new ConnectionCallback() {
-					public Object doInConnection(Connection connection) throws SQLException, DataAccessException {
-						for (Iterator it = schemaCreationScripts.iterator(); it.hasNext(); ) {
-							Resource resource = (Resource)it.next();
-							try {
-								InputStream in = resource.getInputStream();
+				boolean failure = true;
+				try {
+					jdbcTemplate.execute(new ConnectionCallback() {
+						public Object doInConnection(Connection connection) throws SQLException, DataAccessException {
+							for (Iterator it = schemaCreationScripts.iterator(); it.hasNext(); ) {
+								Resource resource = (Resource)it.next();
 								try {
-									LoggerOutputStream out = new LoggerOutputStream(log, "UTF-8");
+									InputStream in = resource.getInputStream();
 									try {
-										// runScript returns the number of SQLExceptions thrown during the execution
-										if (ij.runScript(connection, in, scriptEncoding, out, "UTF-8") > 0) {
-											throw new SchemaCreationException("Script " + resource.getFilename() + " executed with errors");
+										LoggerOutputStream out = new LoggerOutputStream(log, "UTF-8");
+										try {
+											// runScript returns the number of SQLExceptions thrown during the execution
+											if (ij.runScript(connection, in, scriptEncoding, out, "UTF-8") > 0) {
+												throw new SchemaCreationException("Script " + resource.getFilename() + " executed with errors");
+											}
+										}
+										finally {
+											out.close();
 										}
 									}
 									finally {
-										out.close();
+										in.close();
 									}
 								}
-								finally {
-									in.close();
+								catch (IOException ex) {
+									throw new SchemaCreationException("Failed to read script " + resource.getFilename(), ex);
 								}
 							}
-							catch (IOException ex) {
-								throw new SchemaCreationException("Failed to read script " + resource.getFilename(), ex);
-							}
+							return null;
 						}
-						return null;
+					});
+					failure = false;
+				}
+				finally {
+					if (failure) {
+						shutdown();
 					}
-				});
+				}
 			}
 		}
 	}
-
-	public void destroy() throws Exception {
+	
+	private void shutdown() throws Exception {
 		dataSource.setShutdownDatabase("shutdown");
 		// getConnection must be called to actually perform the shutdown. Note that this 
 		// instruction always throws an exception. We therefore catch SQLExceptions and check
@@ -143,6 +151,10 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 			}
 		}
 		executeOfflineActions(afterShutdownActions);
+	}
+	
+	public void destroy() throws Exception {
+		shutdown();
 	}
 
 	public Class getObjectType() {
