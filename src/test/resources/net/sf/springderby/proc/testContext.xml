@@ -10,9 +10,15 @@
 				<bean class="net.sf.springderby.DeleteDatabaseAction"/>
 			</list>
 		</property>
-		<property name="schemaCreationScripts">
+		<property name="afterCreationActions">
 			<list>
-				<value type="org.springframework.core.io.Resource">classpath:/net/sf/springderby/scripts/db2datetime.sql</value>
+				<bean class="net.sf.springderby.ExecuteSqlScriptsAction">
+					<property name="scripts">
+						<list>
+							<value type="org.springframework.core.io.Resource">classpath:/net/sf/springderby/scripts/db2datetime.sql</value>
+						</list>
+					</property>
+				</bean>
 			</list>
 		</property>
 		<property name="afterShutdownActions">
