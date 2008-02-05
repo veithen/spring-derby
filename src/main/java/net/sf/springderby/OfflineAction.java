@@ -13,13 +13,20 @@
  */
 package net.sf.springderby;
 
-import java.io.File;
 
 /**
+ * An action that can be executed on an offline database.
  * 
  * @author Andreas Veithen
  * @version $Id$
  */
 public interface OfflineAction {
-	void execute(File databaseLocation) throws Exception;
+	/**
+	 * Execute the action on the specified database.
+	 * 
+	 * @param context an {@link OfflineActionContext} object encapsulating
+	 *        the required information to execute the action
+	 * @throws Exception if an error occurs
+	 */
+	void execute(OfflineActionContext context) throws Exception;
 }

@@ -13,17 +13,16 @@
  */
 package net.sf.springderby;
 
-import java.io.File;
-
 import org.apache.commons.io.FileUtils;
 
 /**
+ * Offline action that consists in deleting the database.
  * 
  * @author Andreas Veithen
  * @version $Id$
  */
 public class DeleteDatabaseAction implements OfflineAction {
-	public void execute(File databaseLocation) throws Exception {
-		FileUtils.deleteDirectory(databaseLocation);
+	public void execute(OfflineActionContext context) throws Exception {
+		FileUtils.deleteDirectory(context.getDatabaseLocation());
 	}
 }

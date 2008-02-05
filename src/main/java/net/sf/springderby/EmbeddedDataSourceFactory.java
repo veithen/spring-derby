@@ -39,6 +39,18 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * @version $Id$
  */
 public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBean, FactoryBean {
+	private static class OfflineActionContextImpl implements OfflineActionContext {
+		private final File databaseLocation;
+		
+		public OfflineActionContextImpl(File databaseLocation) {
+			this.databaseLocation = databaseLocation;
+		}
+
+		public File getDatabaseLocation() {
+			return databaseLocation;
+		}
+	}
+	
 	private final Log log = LogFactory.getLog(EmbeddedDataSourceFactory.class);
 	
 	private boolean create;
@@ -81,8 +93,9 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 	
 	private void executeOfflineActions(List/*<OfflineAction>*/ actions) throws Exception {
 		if (actions != null) {
+			OfflineActionContext context = new OfflineActionContextImpl(new File(databaseName));
 			for (Iterator it = actions.iterator(); it.hasNext();) {
-				((OfflineAction)it.next()).execute(new File(databaseName));
+				((OfflineAction)it.next()).execute(context);
 			}
 		}
 	}
