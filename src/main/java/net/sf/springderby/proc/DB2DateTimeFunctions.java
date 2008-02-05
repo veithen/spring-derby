@@ -24,6 +24,7 @@ import java.util.GregorianCalendar;
  * time functions.
  * 
  * @author Andreas Veithen
+ * @version $Id$
  */
 public class DB2DateTimeFunctions {
 	private DB2DateTimeFunctions() {}

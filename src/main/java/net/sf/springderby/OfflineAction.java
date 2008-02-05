@@ -15,6 +15,11 @@ package net.sf.springderby;
 
 import java.io.File;
 
+/**
+ * 
+ * @author Andreas Veithen
+ * @version $Id$
+ */
 public interface OfflineAction {
 	void execute(File databaseLocation) throws Exception;
 }

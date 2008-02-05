@@ -15,6 +15,11 @@ package net.sf.springderby;
 
 import org.springframework.dao.DataAccessException;
 
+/**
+ * 
+ * @author Andreas Veithen
+ * @version $Id$
+ */
 public class SchemaCreationException extends DataAccessException {
 	public SchemaCreationException(String msg, Throwable ex) {
 		super(msg, ex);

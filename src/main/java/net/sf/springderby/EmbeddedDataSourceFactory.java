@@ -33,6 +33,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+/**
+ * 
+ * @author Andreas Veithen
+ * @version $Id$
+ */
 public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBean, FactoryBean {
 	private final Log log = LogFactory.getLog(EmbeddedDataSourceFactory.class);
 	

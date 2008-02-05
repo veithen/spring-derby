@@ -27,6 +27,7 @@ import org.apache.commons.logging.Log;
  * {@link OutputStream} implementation that redirects to a logger.
  * 
  * @author Andreas Veithen
+ * @version $Id$
  */
 public class LoggerOutputStream extends OutputStream {
 	private final Log log;

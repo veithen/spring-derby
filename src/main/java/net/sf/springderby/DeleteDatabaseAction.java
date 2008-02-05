@@ -17,6 +17,11 @@ import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 
+/**
+ * 
+ * @author Andreas Veithen
+ * @version $Id$
+ */
 public class DeleteDatabaseAction implements OfflineAction {
 	public void execute(File databaseLocation) throws Exception {
 		FileUtils.deleteDirectory(databaseLocation);
