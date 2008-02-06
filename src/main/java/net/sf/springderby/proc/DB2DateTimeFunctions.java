@@ -21,7 +21,10 @@ import java.util.GregorianCalendar;
  * Emulation of DB2 date and time functions.
  * <p>
  * This class contains a set of static methods that emulate various DB2 date and
- * time functions.
+ * time functions. Note that the DB2 functions accept DATE, TIMESTAMP and CHAR
+ * values, whereas the emulation functions defined here only accept DATE values.
+ * In accordance with the DB2 behaviour, all functions are defined to
+ * return NULL if the argument is NULL.
  * 
  * @author Andreas Veithen
  * @version $Id$
@@ -36,8 +39,13 @@ public class DB2DateTimeFunctions {
 	 * The DAYOFWEEK function returns an integer in the range of 1 to 7 that represents the
 	 * day of the week where 1 is Sunday and 7 is Saturday.
 	 * </blockquote>
+	 * 
 	 * @param date the date value
 	 * @return the day of the week
+	 * 
+	 * @@net.sf.springderby.proc.NameAttribute("DAYOFWEEK")
+	 * @@net.sf.springderby.proc.NoSqlAttribute()
+	 * @@net.sf.springderby.proc.ReturnsNullOnNullInputAttribute()
 	 */
 	public static int dayOfWeek(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
@@ -51,8 +59,14 @@ public class DB2DateTimeFunctions {
 	 * <blockquote>
 	 * The DAYOFWEEK_ISO function returns an integer in the range of 1 to 7 that
 	 * represents the day of the week, where 1 is Monday and 7 is Sunday.
+	 * </blockquote>
+	 * 
 	 * @param date the date value
 	 * @return the day of the week
+	 * 
+	 * @@net.sf.springderby.proc.NameAttribute("DAYOFWEEK_ISO")
+	 * @@net.sf.springderby.proc.NoSqlAttribute()
+	 * @@net.sf.springderby.proc.ReturnsNullOnNullInputAttribute()
 	 */
 	public static int dayOfWeekIso(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
@@ -68,8 +82,13 @@ public class DB2DateTimeFunctions {
 	 * The DAYOFYEAR function returns an integer in the range of 1 to 366 that
 	 * represents the day of the year where 1 is January 1.
 	 * </blockquote>
+	 * 
 	 * @param date the date value
 	 * @return the day of the year
+	 * 
+	 * @@net.sf.springderby.proc.NameAttribute("DAYOFYEAR")
+	 * @@net.sf.springderby.proc.NoSqlAttribute()
+	 * @@net.sf.springderby.proc.ReturnsNullOnNullInputAttribute()
 	 */
 	public static int dayOfYear(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
@@ -84,8 +103,13 @@ public class DB2DateTimeFunctions {
 	 * The LAST_DAY scalar function returns a date that represents the last day
 	 * of the month of the date argument.
 	 * </blockquote>
+	 * 
 	 * @param date the date value
 	 * @return the last day of the month
+	 * 
+	 * @@net.sf.springderby.proc.NameAttribute("LAST_DAY")
+	 * @@net.sf.springderby.proc.NoSqlAttribute()
+	 * @@net.sf.springderby.proc.ReturnsNullOnNullInputAttribute()
 	 */
 	public static Date lastDay(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
@@ -103,8 +127,13 @@ public class DB2DateTimeFunctions {
 	 * The WEEK function returns an integer in the range of 1 to 54 that represents the week
 	 * of the year. The week starts with Sunday, and January 1 is always in the first week.
 	 * </blockquote>
+	 * 
 	 * @param date the date value
 	 * @return the week of the year
+	 * 
+	 * @@net.sf.springderby.proc.NameAttribute("WEEK")
+	 * @@net.sf.springderby.proc.NoSqlAttribute()
+	 * @@net.sf.springderby.proc.ReturnsNullOnNullInputAttribute()
 	 */
 	public static int week(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
@@ -125,8 +154,13 @@ public class DB2DateTimeFunctions {
 	 * as the last week of the previous year, or to have up to 3 days at the end of a year
 	 * appear as the first week of the next year.
 	 * </blockquote>
+	 * 
 	 * @param date the date value
 	 * @return the week of the year
+	 * 
+	 * @@net.sf.springderby.proc.NameAttribute("WEEK_ISO")
+	 * @@net.sf.springderby.proc.NoSqlAttribute()
+	 * @@net.sf.springderby.proc.ReturnsNullOnNullInputAttribute()
 	 */
 	public static int weekIso(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();

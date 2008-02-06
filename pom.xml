@@ -50,6 +50,11 @@
 			<version>${derby.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>commons-attributes</groupId>
+			<artifactId>commons-attributes-api</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>1.4</version>
@@ -64,6 +69,18 @@
 	
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>commons-attributes-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>test-compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -86,6 +103,14 @@
 						<link>http://static.springframework.org/spring/docs/2.0.x/api/</link>
 						<link>http://commons.apache.org/logging/commons-logging-1.0.4/docs/apidocs/</link>
 					</links>
+					<additionalJOption>-J-Dorg.apache.commons.attributes.javadoc.CATaglet.sources=${basedir}</additionalJOption>
+					<taglet>org.apache.commons.attributes.javadoc.CATaglet</taglet>
+					<tagletArtifact>
+						<groupId>commons-attributes</groupId>
+						<artifactId>commons-attributes-compiler</artifactId>
+						<version>2.2</version>
+					</tagletArtifact>
+					<verbose>true</verbose>
 				</configuration>
 			</plugin>
 			<plugin>
