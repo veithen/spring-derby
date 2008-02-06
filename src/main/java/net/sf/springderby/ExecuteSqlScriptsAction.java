@@ -14,7 +14,6 @@
 package net.sf.springderby;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Iterator;
@@ -22,7 +21,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.derby.tools.ij;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ConnectionCallback;
@@ -36,9 +34,15 @@ import org.springframework.jdbc.core.ConnectionCallback;
 public class ExecuteSqlScriptsAction implements OnlineAction, ConnectionCallback {
 	private final static Log log = LogFactory.getLog(ExecuteSqlScriptsAction.class);
 	
+	private final SqlScriptExecutionSupport sqlScriptExecutionSupport = new SqlScriptExecutionSupport();
+	
 	private String encoding = "UTF-8";
 	private List/*<Resource>*/ scripts;
 	
+	public void setSqlScriptExecutor(SqlScriptExecutor sqlScriptExecutor) {
+		sqlScriptExecutionSupport.setSqlScriptExecutor(sqlScriptExecutor);
+	}
+
 	/**
 	 * Set the encoding of the scripts.
 	 * The default value for this property is UTF-8.
@@ -66,22 +70,7 @@ public class ExecuteSqlScriptsAction implements OnlineAction, ConnectionCallback
 		for (Iterator it = scripts.iterator(); it.hasNext(); ) {
 			Resource resource = (Resource)it.next();
 			try {
-				InputStream in = resource.getInputStream();
-				try {
-					LoggerOutputStream out = new LoggerOutputStream(log, "UTF-8");
-					try {
-						// runScript returns the number of SQLExceptions thrown during the execution
-						if (ij.runScript(connection, in, encoding, out, "UTF-8") > 0) {
-							throw new SchemaCreationException("Script " + resource.getFilename() + " executed with errors");
-						}
-					}
-					finally {
-						out.close();
-					}
-				}
-				finally {
-					in.close();
-				}
+				sqlScriptExecutionSupport.getSqlScriptExecutor().executeScript(connection, resource, encoding);
 			}
 			catch (IOException ex) {
 				// TODO: this exception is no longer appropriate
