@@ -19,5 +19,5 @@ package net.sf.springderby.proc;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class ContainsSqlAttribute {
+public class ContainsSqlAttribute implements ProcedureAttribute {
 }

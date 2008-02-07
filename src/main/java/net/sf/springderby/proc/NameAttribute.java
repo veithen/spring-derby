@@ -19,7 +19,7 @@ package net.sf.springderby.proc;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class NameAttribute {
+public class NameAttribute implements ProcedureAttribute {
 	private final String name;
 	
 	public NameAttribute(String name) {

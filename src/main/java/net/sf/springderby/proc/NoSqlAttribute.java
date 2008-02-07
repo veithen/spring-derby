@@ -19,5 +19,5 @@ package net.sf.springderby.proc;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class NoSqlAttribute {
+public class NoSqlAttribute implements ProcedureAttribute {
 }

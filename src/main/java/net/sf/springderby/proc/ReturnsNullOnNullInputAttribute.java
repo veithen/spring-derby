@@ -19,5 +19,5 @@ package net.sf.springderby.proc;
  * @author Andreas Veithen
  * @version $Id$
  */
-public class ReturnsNullOnNullInputAttribute {
+public class ReturnsNullOnNullInputAttribute implements ProcedureAttribute {
 }
