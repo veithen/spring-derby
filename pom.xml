@@ -103,14 +103,30 @@
 						<link>http://static.springframework.org/spring/docs/2.0.x/api/</link>
 						<link>http://commons.apache.org/logging/commons-logging-1.0.4/docs/apidocs/</link>
 					</links>
+					<!-- Commons Attributes taglet -->
 					<additionalJOption>-J-Dorg.apache.commons.attributes.javadoc.CATaglet.sources=${basedir}</additionalJOption>
-					<taglet>org.apache.commons.attributes.javadoc.CATaglet</taglet>
-					<tagletArtifact>
-						<groupId>commons-attributes</groupId>
-						<artifactId>commons-attributes-compiler</artifactId>
-						<version>2.2</version>
-					</tagletArtifact>
-					<verbose>true</verbose>
+					<taglets>
+						<taglet>
+							<tagletClass>org.apache.commons.attributes.javadoc.CATaglet</tagletClass>
+							<tagletArtifact>
+								<groupId>commons-attributes</groupId>
+								<artifactId>commons-attributes-compiler</artifactId>
+								<version>2.2</version>
+							</tagletArtifact>
+						</taglet>
+					</taglets>
+					<!-- UmlGraph doclet -->
+					<doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
+					<docletArtifact>
+						<groupId>gr.spinellis</groupId>
+						<artifactId>UmlGraph</artifactId>
+						<version>4.4</version>
+					</docletArtifact>
+					<additionalparam>
+						-inferrel -inferdep -quiet -hide java.* -collpackages java.util.* -qualify
+						-postfixpackage -nodefontsize 9
+						-nodefontpackagesize 7
+					</additionalparam>
 				</configuration>
 			</plugin>
 			<plugin>
