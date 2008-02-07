@@ -16,7 +16,6 @@ package net.sf.springderby;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -37,7 +36,7 @@ public class ExecuteSqlScriptsAction implements OnlineAction, ConnectionCallback
 	private final SqlScriptExecutionSupport sqlScriptExecutionSupport = new SqlScriptExecutionSupport();
 	
 	private String encoding = "UTF-8";
-	private List/*<Resource>*/ scripts;
+	private List<Resource> scripts;
 	
 	public void setSqlScriptExecutor(SqlScriptExecutor sqlScriptExecutor) {
 		sqlScriptExecutionSupport.setSqlScriptExecutor(sqlScriptExecutor);
@@ -58,7 +57,7 @@ public class ExecuteSqlScriptsAction implements OnlineAction, ConnectionCallback
 	 * 
 	 * @param scripts a list of {@link Resource} objects identifying the scripts to execute
 	 */
-	public void setScripts(List scripts) {
+	public void setScripts(List<Resource> scripts) {
 		this.scripts = scripts;
 	}
 
@@ -67,8 +66,7 @@ public class ExecuteSqlScriptsAction implements OnlineAction, ConnectionCallback
 	}
 	
 	public Object doInConnection(Connection connection) throws SQLException, DataAccessException {
-		for (Iterator it = scripts.iterator(); it.hasNext(); ) {
-			Resource resource = (Resource)it.next();
+		for (Resource resource : scripts) {
 			try {
 				sqlScriptExecutionSupport.getSqlScriptExecutor().executeScript(connection, resource, encoding);
 			}

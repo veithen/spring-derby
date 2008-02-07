@@ -15,7 +15,6 @@ package net.sf.springderby;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -64,9 +63,9 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 	
 	private String databaseName;
 	private String user;
-	private List/*<OfflineAction>*/ beforeStartupActions;
-	private List/*<OnlineAction>*/ afterCreationActions;
-	private List/*<OfflineAction>*/ afterShutdownActions;
+	private List<OfflineAction> beforeStartupActions;
+	private List<OnlineAction> afterCreationActions;
+	private List<OfflineAction> afterShutdownActions;
 	private EmbeddedDataSource dataSource;
 	
 	public void setDatabaseName(String databaseName) {
@@ -81,32 +80,32 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 		this.create = create;
 	}
 
-	public void setBeforeStartupActions(List beforeStartupActions) {
+	public void setBeforeStartupActions(List<OfflineAction> beforeStartupActions) {
 		this.beforeStartupActions = beforeStartupActions;
 	}
 	
-	public void setAfterCreationActions(List afterCreationActions) {
+	public void setAfterCreationActions(List<OnlineAction> afterCreationActions) {
 		this.afterCreationActions = afterCreationActions;
 	}
 
-	public void setAfterShutdownActions(List afterShutdownActions) {
+	public void setAfterShutdownActions(List<OfflineAction> afterShutdownActions) {
 		this.afterShutdownActions = afterShutdownActions;
 	}
 	
-	private void executeOfflineActions(List/*<OfflineAction>*/ actions) throws Exception {
+	private void executeOfflineActions(List<OfflineAction> actions) throws Exception {
 		if (actions != null) {
 			OfflineActionContext context = new OfflineActionContextImpl(new File(databaseName));
-			for (Iterator it = actions.iterator(); it.hasNext();) {
-				((OfflineAction)it.next()).execute(context);
+			for (OfflineAction action : actions) {
+				action.execute(context);
 			}
 		}
 	}
 	
-	private void executeOnlineActions(List/*<OnlineAction>*/ actions) throws Exception {
+	private void executeOnlineActions(List<OnlineAction> actions) throws Exception {
 		if (actions != null) {
 			OnlineActionContext context = new OnlineActionContextImpl(dataSource);
-			for (Iterator it = actions.iterator(); it.hasNext();) {
-				((OnlineAction)it.next()).execute(context);
+			for (OnlineAction action : actions) {
+				action.execute(context);
 			}
 		}
 	}
@@ -172,7 +171,7 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 		shutdown();
 	}
 
-	public Class getObjectType() {
+	public Class<?> getObjectType() {
 		return EmbeddedDataSourceFactory.class;
 	}
 

@@ -59,6 +59,7 @@ public class LoggerOutputStream extends OutputStream {
 		this(log, Charset.forName(charset));
 	}
 	
+	@Override
 	public void write(byte[] bytes, int offset, int length) {
 		while (length > 0) {
 			int c = Math.min(length, decoderIn.remaining());
@@ -69,14 +70,17 @@ public class LoggerOutputStream extends OutputStream {
 		}
 	}
 
+	@Override
 	public void write(byte[] bytes) {
 		write(bytes, 0, bytes.length);
 	}
 
+	@Override
 	public void write(int b) {
 		write(new byte[] { (byte)b }, 0, 1);
 	}
 	
+	@Override
 	public void close() {
 		processInput(true);
 		if (lineBuffer.length() > 0) {

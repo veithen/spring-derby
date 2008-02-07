@@ -70,23 +70,26 @@
 	<build>
 		<plugins>
 			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>commons-attributes-maven-plugin</artifactId>
+				<artifactId>retrotranslator-maven-plugin</artifactId>
 				<executions>
 					<execution>
 						<goals>
-							<goal>compile</goal>
-							<goal>test-compile</goal>
+							<goal>translate-project</goal>
 						</goals>
+						<configuration>
+							<classifier>jdk14</classifier>
+							<attach>true</attach>
+						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.4</source>
-					<target>1.4</target>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -98,23 +101,6 @@
 				<configuration>
 					<breakiterator>true</breakiterator>
 					<linksource>true</linksource>
-					<links>
-						<link>http://java.sun.com/j2se/1.4.2/docs/api/</link>
-						<link>http://static.springframework.org/spring/docs/2.0.x/api/</link>
-						<link>http://commons.apache.org/logging/commons-logging-1.0.4/docs/apidocs/</link>
-					</links>
-					<!-- Commons Attributes taglet -->
-					<additionalJOption>-J-Dorg.apache.commons.attributes.javadoc.CATaglet.sources=${basedir}</additionalJOption>
-					<taglets>
-						<taglet>
-							<tagletClass>org.apache.commons.attributes.javadoc.CATaglet</tagletClass>
-							<tagletArtifact>
-								<groupId>commons-attributes</groupId>
-								<artifactId>commons-attributes-compiler</artifactId>
-								<version>2.2</version>
-							</tagletArtifact>
-						</taglet>
-					</taglets>
 					<!-- UmlGraph doclet -->
 					<doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
 					<docletArtifact>
@@ -126,6 +112,10 @@
 						-inferrel -inferdep -quiet -hide java.* -collpackages java.util.* -qualify
 						-postfixpackage -nodefontsize 9
 						-nodefontpackagesize 7
+						-link http://java.sun.com/j2se/1.5.0/docs/api/
+						-link http://static.springframework.org/spring/docs/2.0.x/api/
+						-link http://commons.apache.org/logging/commons-logging-1.0.4/docs/apidocs/
+						-link http://db.apache.org/derby/javadoc/publishedapi/jdbc3/
 					</additionalparam>
 				</configuration>
 			</plugin>

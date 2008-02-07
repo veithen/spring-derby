@@ -13,7 +13,7 @@ public class SqlScriptExecutionSupport {
 		if (sqlScriptExecutor == null) {
 			synchronized (SqlScriptExecutionSupport.class) {
 				if (defaultSqlScriptExecutor == null) {
-					Class ijClass;
+					Class<?> ijClass;
 					try {
 						ijClass = Class.forName("org.apache.derby.tools.ij");
 					}
