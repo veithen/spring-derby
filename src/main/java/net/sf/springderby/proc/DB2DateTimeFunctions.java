@@ -17,6 +17,10 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import net.sf.springderby.proc.annotation.DataAccessLevel;
+import net.sf.springderby.proc.annotation.Function;
+import net.sf.springderby.proc.annotation.OnNullInput;
+
 /**
  * Emulation of DB2 date and time functions.
  * <p>
@@ -42,11 +46,8 @@ public class DB2DateTimeFunctions {
 	 * 
 	 * @param date the date value
 	 * @return the day of the week
-	 * 
-	 * @@net.sf.springderby.proc.NameAttribute("DAYOFWEEK")
-	 * @@net.sf.springderby.proc.NoSqlAttribute()
-	 * @@net.sf.springderby.proc.ReturnsNullOnNullInputAttribute()
 	 */
+	@Function(name="DAYOFWEEK", dataAccessLevel=DataAccessLevel.NO_SQL, onNullInput=OnNullInput.RETURNS_NULL)
 	public static int dayOfWeek(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
@@ -63,11 +64,8 @@ public class DB2DateTimeFunctions {
 	 * 
 	 * @param date the date value
 	 * @return the day of the week
-	 * 
-	 * @@net.sf.springderby.proc.NameAttribute("DAYOFWEEK_ISO")
-	 * @@net.sf.springderby.proc.NoSqlAttribute()
-	 * @@net.sf.springderby.proc.ReturnsNullOnNullInputAttribute()
 	 */
+	@Function(name="DAYOFWEEK_ISO", dataAccessLevel=DataAccessLevel.NO_SQL, onNullInput=OnNullInput.RETURNS_NULL)
 	public static int dayOfWeekIso(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
@@ -85,11 +83,8 @@ public class DB2DateTimeFunctions {
 	 * 
 	 * @param date the date value
 	 * @return the day of the year
-	 * 
-	 * @@net.sf.springderby.proc.NameAttribute("DAYOFYEAR")
-	 * @@net.sf.springderby.proc.NoSqlAttribute()
-	 * @@net.sf.springderby.proc.ReturnsNullOnNullInputAttribute()
 	 */
+	@Function(name="DAYOFYEAR", dataAccessLevel=DataAccessLevel.NO_SQL, onNullInput=OnNullInput.RETURNS_NULL)
 	public static int dayOfYear(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
@@ -106,11 +101,8 @@ public class DB2DateTimeFunctions {
 	 * 
 	 * @param date the date value
 	 * @return the last day of the month
-	 * 
-	 * @@net.sf.springderby.proc.NameAttribute("LAST_DAY")
-	 * @@net.sf.springderby.proc.NoSqlAttribute()
-	 * @@net.sf.springderby.proc.ReturnsNullOnNullInputAttribute()
 	 */
+	@Function(name="LAST_DAY", dataAccessLevel=DataAccessLevel.NO_SQL, onNullInput=OnNullInput.RETURNS_NULL)
 	public static Date lastDay(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
@@ -130,11 +122,8 @@ public class DB2DateTimeFunctions {
 	 * 
 	 * @param date the date value
 	 * @return the week of the year
-	 * 
-	 * @@net.sf.springderby.proc.NameAttribute("WEEK")
-	 * @@net.sf.springderby.proc.NoSqlAttribute()
-	 * @@net.sf.springderby.proc.ReturnsNullOnNullInputAttribute()
 	 */
+	@Function(name="WEEK", dataAccessLevel=DataAccessLevel.NO_SQL, onNullInput=OnNullInput.RETURNS_NULL)
 	public static int week(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
@@ -157,11 +146,8 @@ public class DB2DateTimeFunctions {
 	 * 
 	 * @param date the date value
 	 * @return the week of the year
-	 * 
-	 * @@net.sf.springderby.proc.NameAttribute("WEEK_ISO")
-	 * @@net.sf.springderby.proc.NoSqlAttribute()
-	 * @@net.sf.springderby.proc.ReturnsNullOnNullInputAttribute()
 	 */
+	@Function(name="WEEK_ISO", dataAccessLevel=DataAccessLevel.NO_SQL, onNullInput=OnNullInput.RETURNS_NULL)
 	public static int weekIso(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
