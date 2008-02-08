@@ -17,6 +17,7 @@
 		<menu name="Spring Derby">
 			<item name="Documentation" href="index.html">
 				<item name="Configuration" href="config.html"/>
+				<item name="Compatibility" href="compatibility.html"/>
 				<item name="Javadocs" href="apidocs/index.html"/>
 			</item>
 			<item name="Project Information" href="project-info.html">

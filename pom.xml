@@ -24,8 +24,6 @@
 	
 	<properties>
 		<spring.version>1.2.8</spring.version>
-		<!-- ij.runScript only exists beginning with this version of Derby -->
-		<derby.version>10.2.1.6</derby.version>
 	</properties>
 	
 	<dependencies>
@@ -42,12 +40,12 @@
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
-			<version>${derby.version}</version>
+			<version>10.1.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derbytools</artifactId>
-			<version>${derby.version}</version>
+			<version>10.2.1.6</version> <!-- ij.runScript only exists beginning with this version of Derby -->
 		</dependency>
 		<dependency>
 			<groupId>commons-attributes</groupId>
