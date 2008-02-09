@@ -1,3 +1,16 @@
+/**
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package net.sf.springderby.wrapper;
 
 import java.io.InputStream;
@@ -19,10 +32,19 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
 
+/**
+ * Base class for {@link ResultSet} wrappers.
+ * Except for {@link #getStatement()}, all methods delegate to the target {@link ResultSet} object.
+ * 
+ * @author Andreas Veithen
+ * @version $Id$
+ */
 public class ResultSetWrapper implements ResultSet {
+	private Statement statementWrapper;
 	private ResultSet parent;
 	
-	final void init(ResultSet parent) {
+	final void init(Statement statementWrapper, ResultSet parent) {
+		this.statementWrapper = statementWrapper;
 		this.parent = parent;
 	}
 	
@@ -428,588 +450,579 @@ public class ResultSetWrapper implements ResultSet {
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getStatement()}.
+	 * This method returns the {@link StatementWrapper} or {@link PreparedStatementWrapper}
+	 * object that created this wrapper. For consistency reasons, it can't be
+	 * overridden.
 	 */
-	public Statement getStatement() throws SQLException {
-		return parent.getStatement();
+	public final Statement getStatement() throws SQLException {
+		return statementWrapper;
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getString(int)}.
 	 */
 	public String getString(int columnIndex) throws SQLException {
 		return parent.getString(columnIndex);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getString(String)}.
 	 */
 	public String getString(String columnName) throws SQLException {
 		return parent.getString(columnName);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getTime(int, Calendar)}.
 	 */
 	public Time getTime(int columnIndex, Calendar cal) throws SQLException {
 		return parent.getTime(columnIndex, cal);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getTime(int)}.
 	 */
 	public Time getTime(int columnIndex) throws SQLException {
 		return parent.getTime(columnIndex);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getTime(String, Calendar)}.
 	 */
 	public Time getTime(String columnName, Calendar cal) throws SQLException {
 		return parent.getTime(columnName, cal);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getTime(String)}.
 	 */
 	public Time getTime(String columnName) throws SQLException {
 		return parent.getTime(columnName);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getTimestamp(int, Calendar)}.
 	 */
-	public Timestamp getTimestamp(int columnIndex, Calendar cal)
-			throws SQLException {
+	public Timestamp getTimestamp(int columnIndex, Calendar cal) throws SQLException {
 		return parent.getTimestamp(columnIndex, cal);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getTimestamp(int)}.
 	 */
 	public Timestamp getTimestamp(int columnIndex) throws SQLException {
 		return parent.getTimestamp(columnIndex);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getTime(String, Calendar)}.
 	 */
-	public Timestamp getTimestamp(String columnName, Calendar cal)
-			throws SQLException {
+	public Timestamp getTimestamp(String columnName, Calendar cal) throws SQLException {
 		return parent.getTimestamp(columnName, cal);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getTime(String)}.
 	 */
 	public Timestamp getTimestamp(String columnName) throws SQLException {
 		return parent.getTimestamp(columnName);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getType()}.
 	 */
 	public int getType() throws SQLException {
 		return parent.getType();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getUnicodeStream(int)}.
 	 */
+	@SuppressWarnings("deprecation")
 	public InputStream getUnicodeStream(int columnIndex) throws SQLException {
 		return parent.getUnicodeStream(columnIndex);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getUnicodeStream(String)}.
 	 */
+	@SuppressWarnings("deprecation")
 	public InputStream getUnicodeStream(String columnName) throws SQLException {
 		return parent.getUnicodeStream(columnName);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getURL(int)}.
 	 */
 	public URL getURL(int columnIndex) throws SQLException {
 		return parent.getURL(columnIndex);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getURL(String)}.
 	 */
 	public URL getURL(String columnName) throws SQLException {
 		return parent.getURL(columnName);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#getWarnings()}.
 	 */
 	public SQLWarning getWarnings() throws SQLException {
 		return parent.getWarnings();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#insertRow()}.
 	 */
 	public void insertRow() throws SQLException {
 		parent.insertRow();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#isAfterLast()}.
 	 */
 	public boolean isAfterLast() throws SQLException {
 		return parent.isAfterLast();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#isBeforeFirst()}.
 	 */
 	public boolean isBeforeFirst() throws SQLException {
 		return parent.isBeforeFirst();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#isFirst()}.
 	 */
 	public boolean isFirst() throws SQLException {
 		return parent.isFirst();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#isLast()}.
 	 */
 	public boolean isLast() throws SQLException {
 		return parent.isLast();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#last()}.
 	 */
 	public boolean last() throws SQLException {
 		return parent.last();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#moveToCurrentRow()}.
 	 */
 	public void moveToCurrentRow() throws SQLException {
 		parent.moveToCurrentRow();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#moveToInsertRow()}.
 	 */
 	public void moveToInsertRow() throws SQLException {
 		parent.moveToInsertRow();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#next()}.
 	 */
 	public boolean next() throws SQLException {
 		return parent.next();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#previous()}.
 	 */
 	public boolean previous() throws SQLException {
 		return parent.previous();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#refreshRow()}.
 	 */
 	public void refreshRow() throws SQLException {
 		parent.refreshRow();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#relative(int)}.
 	 */
 	public boolean relative(int rows) throws SQLException {
 		return parent.relative(rows);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#rowDeleted()}.
 	 */
 	public boolean rowDeleted() throws SQLException {
 		return parent.rowDeleted();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#rowInserted()}.
 	 */
 	public boolean rowInserted() throws SQLException {
 		return parent.rowInserted();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#rowUpdated()}.
 	 */
 	public boolean rowUpdated() throws SQLException {
 		return parent.rowUpdated();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#setFetchDirection(int)}.
 	 */
 	public void setFetchDirection(int direction) throws SQLException {
 		parent.setFetchDirection(direction);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#setFetchSize(int)}.
 	 */
 	public void setFetchSize(int rows) throws SQLException {
 		parent.setFetchSize(rows);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateArray(int, Array)}.
 	 */
 	public void updateArray(int columnIndex, Array x) throws SQLException {
 		parent.updateArray(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateArray(String, Array)}.
 	 */
 	public void updateArray(String columnName, Array x) throws SQLException {
 		parent.updateArray(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateAsciiStream(int, InputStream, int)}.
 	 */
-	public void updateAsciiStream(int columnIndex, InputStream x, int length)
-			throws SQLException {
+	public void updateAsciiStream(int columnIndex, InputStream x, int length) throws SQLException {
 		parent.updateAsciiStream(columnIndex, x, length);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateAsciiStream(String, InputStream, int)}.
 	 */
-	public void updateAsciiStream(String columnName, InputStream x, int length)
-			throws SQLException {
+	public void updateAsciiStream(String columnName, InputStream x, int length) throws SQLException {
 		parent.updateAsciiStream(columnName, x, length);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateBigDecimal(int, BigDecimal)}.
 	 */
-	public void updateBigDecimal(int columnIndex, BigDecimal x)
-			throws SQLException {
+	public void updateBigDecimal(int columnIndex, BigDecimal x) throws SQLException {
 		parent.updateBigDecimal(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateBigDecimal(String, BigDecimal)}.
 	 */
-	public void updateBigDecimal(String columnName, BigDecimal x)
-			throws SQLException {
+	public void updateBigDecimal(String columnName, BigDecimal x) throws SQLException {
 		parent.updateBigDecimal(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateBinaryStream(int, InputStream, int)}.
 	 */
-	public void updateBinaryStream(int columnIndex, InputStream x, int length)
-			throws SQLException {
+	public void updateBinaryStream(int columnIndex, InputStream x, int length) throws SQLException {
 		parent.updateBinaryStream(columnIndex, x, length);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateBinaryStream(String, InputStream, int)}.
 	 */
-	public void updateBinaryStream(String columnName, InputStream x, int length)
-			throws SQLException {
+	public void updateBinaryStream(String columnName, InputStream x, int length) throws SQLException {
 		parent.updateBinaryStream(columnName, x, length);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateBlob(int, Blob)}.
 	 */
 	public void updateBlob(int columnIndex, Blob x) throws SQLException {
 		parent.updateBlob(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateBlob(String, Blob)}.
 	 */
 	public void updateBlob(String columnName, Blob x) throws SQLException {
 		parent.updateBlob(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateBoolean(int, boolean)}.
 	 */
 	public void updateBoolean(int columnIndex, boolean x) throws SQLException {
 		parent.updateBoolean(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateBoolean(String, boolean)}.
 	 */
 	public void updateBoolean(String columnName, boolean x) throws SQLException {
 		parent.updateBoolean(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateByte(int, byte)}.
 	 */
 	public void updateByte(int columnIndex, byte x) throws SQLException {
 		parent.updateByte(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateByte(String, byte)}.
 	 */
 	public void updateByte(String columnName, byte x) throws SQLException {
 		parent.updateByte(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateBytes(int, byte[])}.
 	 */
 	public void updateBytes(int columnIndex, byte[] x) throws SQLException {
 		parent.updateBytes(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateBytes(String, byte[])}.
 	 */
 	public void updateBytes(String columnName, byte[] x) throws SQLException {
 		parent.updateBytes(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateCharacterStream(int, Reader, int)}.
 	 */
-	public void updateCharacterStream(int columnIndex, Reader x, int length)
-			throws SQLException {
+	public void updateCharacterStream(int columnIndex, Reader x, int length) throws SQLException {
 		parent.updateCharacterStream(columnIndex, x, length);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateCharacterStream(String, Reader, int)}.
 	 */
-	public void updateCharacterStream(String columnName, Reader reader,
-			int length) throws SQLException {
+	public void updateCharacterStream(String columnName, Reader reader, int length) throws SQLException {
 		parent.updateCharacterStream(columnName, reader, length);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateClob(int, Clob)}.
 	 */
 	public void updateClob(int columnIndex, Clob x) throws SQLException {
 		parent.updateClob(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateClob(String, Clob)}.
 	 */
 	public void updateClob(String columnName, Clob x) throws SQLException {
 		parent.updateClob(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateDate(int, Date)}.
 	 */
 	public void updateDate(int columnIndex, Date x) throws SQLException {
 		parent.updateDate(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateDate(String, Date)}.
 	 */
 	public void updateDate(String columnName, Date x) throws SQLException {
 		parent.updateDate(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateDouble(int, double)}.
 	 */
 	public void updateDouble(int columnIndex, double x) throws SQLException {
 		parent.updateDouble(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateDouble(String, double)}.
 	 */
 	public void updateDouble(String columnName, double x) throws SQLException {
 		parent.updateDouble(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateFloat(int, float)}.
 	 */
 	public void updateFloat(int columnIndex, float x) throws SQLException {
 		parent.updateFloat(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateFloat(String, float)}.
 	 */
 	public void updateFloat(String columnName, float x) throws SQLException {
 		parent.updateFloat(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateInt(int, int)}.
 	 */
 	public void updateInt(int columnIndex, int x) throws SQLException {
 		parent.updateInt(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateInt(String, int)}.
 	 */
 	public void updateInt(String columnName, int x) throws SQLException {
 		parent.updateInt(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateLong(int, long)}.
 	 */
 	public void updateLong(int columnIndex, long x) throws SQLException {
 		parent.updateLong(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateLong(String, long)}.
 	 */
 	public void updateLong(String columnName, long x) throws SQLException {
 		parent.updateLong(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateNull(int)}.
 	 */
 	public void updateNull(int columnIndex) throws SQLException {
 		parent.updateNull(columnIndex);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateNull(String)}.
 	 */
 	public void updateNull(String columnName) throws SQLException {
 		parent.updateNull(columnName);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateObject(int, Object, int)}.
 	 */
-	public void updateObject(int columnIndex, Object x, int scale)
-			throws SQLException {
+	public void updateObject(int columnIndex, Object x, int scale) throws SQLException {
 		parent.updateObject(columnIndex, x, scale);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateObject(int, Object)}.
 	 */
 	public void updateObject(int columnIndex, Object x) throws SQLException {
 		parent.updateObject(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateObject(String, Object, int)}.
 	 */
-	public void updateObject(String columnName, Object x, int scale)
-			throws SQLException {
+	public void updateObject(String columnName, Object x, int scale) throws SQLException {
 		parent.updateObject(columnName, x, scale);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateObject(String, Object)}.
 	 */
 	public void updateObject(String columnName, Object x) throws SQLException {
 		parent.updateObject(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateRef(int, Ref)}.
 	 */
 	public void updateRef(int columnIndex, Ref x) throws SQLException {
 		parent.updateRef(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateRef(String, Ref)}.
 	 */
 	public void updateRef(String columnName, Ref x) throws SQLException {
 		parent.updateRef(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateRow()}.
 	 */
 	public void updateRow() throws SQLException {
 		parent.updateRow();
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateShort(int, short)}.
 	 */
 	public void updateShort(int columnIndex, short x) throws SQLException {
 		parent.updateShort(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateShort(String, short)}.
 	 */
 	public void updateShort(String columnName, short x) throws SQLException {
 		parent.updateShort(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateString(int, String)}.
 	 */
 	public void updateString(int columnIndex, String x) throws SQLException {
 		parent.updateString(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateString(String, String)}.
 	 */
 	public void updateString(String columnName, String x) throws SQLException {
 		parent.updateString(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateTime(int, Time)}.
 	 */
 	public void updateTime(int columnIndex, Time x) throws SQLException {
 		parent.updateTime(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateTime(String, Time)}.
 	 */
 	public void updateTime(String columnName, Time x) throws SQLException {
 		parent.updateTime(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateTimestamp(int, Timestamp)}.
 	 */
-	public void updateTimestamp(int columnIndex, Timestamp x)
-			throws SQLException {
+	public void updateTimestamp(int columnIndex, Timestamp x) throws SQLException {
 		parent.updateTimestamp(columnIndex, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#updateTime(String, Time)}.
 	 */
-	public void updateTimestamp(String columnName, Timestamp x)
-			throws SQLException {
+	public void updateTimestamp(String columnName, Timestamp x) throws SQLException {
 		parent.updateTimestamp(columnName, x);
 	}
 	
 	/**
-	 * Delegate method for {@link ResultSet#}.
+	 * Delegate method for {@link ResultSet#wasNull()}.
 	 */
 	public boolean wasNull() throws SQLException {
 		return parent.wasNull();

@@ -62,9 +62,9 @@ public class WrapperFactory {
 		return new ResultSetWrapper();
 	}
 	
-	final ResultSetWrapper wrapResultSet(ResultSetType resultSetType, ResultSet parent) {
+	final ResultSetWrapper wrapResultSet(ResultSetType resultSetType, Statement statementWrapper, ResultSet parent) {
 		ResultSetWrapper wrapper = createResultSetWrapper(resultSetType);
-		wrapper.init(parent);
+		wrapper.init(statementWrapper, parent);
 		return wrapper;
 	}
 }

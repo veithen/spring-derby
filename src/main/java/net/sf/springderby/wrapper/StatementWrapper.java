@@ -22,8 +22,7 @@ import java.sql.Statement;
 /**
  * Base class for {@link Statement} wrappers.
  * Except for {@link #getConnection()}, all methods delegate to the target {@link Statement} object.
- * {@link ResultSet} objects are wrapped using the provided {@link WrapperFactory}
- * object.
+ * {@link ResultSet} objects are wrapped using the {@link WrapperFactory} object.
  * 
  * @author Andreas Veithen
  * @version $Id$
@@ -116,7 +115,7 @@ public class StatementWrapper implements Statement {
 	 * {@link ResultSetType#QUERY}.
 	 */
 	public ResultSet executeQuery(String sql) throws SQLException {
-		return wrapperFactory.wrapResultSet(ResultSetType.QUERY, parent.executeQuery(sql));
+		return wrapperFactory.wrapResultSet(ResultSetType.QUERY, this, parent.executeQuery(sql));
 	}
 	
 	/**
@@ -178,7 +177,7 @@ public class StatementWrapper implements Statement {
 	 * {@link ResultSetType#KEYS}.
 	 */
 	public ResultSet getGeneratedKeys() throws SQLException {
-		return wrapperFactory.wrapResultSet(ResultSetType.KEYS, parent.getGeneratedKeys());
+		return wrapperFactory.wrapResultSet(ResultSetType.KEYS, this, parent.getGeneratedKeys());
 	}
 	
 	/**
@@ -223,7 +222,7 @@ public class StatementWrapper implements Statement {
 	 * {@link ResultSetType#QUERY}.
 	 */
 	public ResultSet getResultSet() throws SQLException {
-		return wrapperFactory.wrapResultSet(ResultSetType.QUERY, parent.getResultSet());
+		return wrapperFactory.wrapResultSet(ResultSetType.QUERY, this, parent.getResultSet());
 	}
 	
 	/**
