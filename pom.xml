@@ -108,9 +108,17 @@
 						<version>4.4</version>
 					</docletArtifact>
 					<additionalparam>
-						-inferrel -inferdep -quiet -hide java.* -collpackages java.util.* -qualify
+						-inferrel
+						-inferdep
+						-quiet
+						-hide java.*
+						-hide org.apache.commons.logging.*
+						-collpackages java.util.*
+						-qualify
 						-postfixpackage -nodefontsize 9
 						-nodefontpackagesize 7
+						-author
+						-version
 						-link http://java.sun.com/j2se/1.5.0/docs/api/
 						-link http://static.springframework.org/spring/docs/2.0.x/api/
 						-link http://commons.apache.org/logging/commons-logging-1.0.4/docs/apidocs/
@@ -133,6 +141,8 @@
 			</plugin>
 		</plugins>
 	</reporting>
+	
+	<url>http://spring-derby.sourceforge.net/</url>
 	
 	<inceptionYear>2008</inceptionYear>
 	
