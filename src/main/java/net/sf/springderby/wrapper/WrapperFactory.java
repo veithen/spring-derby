@@ -16,16 +16,16 @@ public class WrapperFactory {
 		return new DatabaseMetaDataWrapper(this, parent);
 	}
 	
-	public StatementWrapper wrapStatement(Statement parent) {
-		return new StatementWrapper(this, parent);
+	public StatementWrapper wrapStatement(ConnectionWrapper connectionWrapper, Statement parent) {
+		return new StatementWrapper(this, connectionWrapper, parent);
 	}
 	
-	public PreparedStatementWrapper wrapPreparedStatement(PreparedStatement parent) {
-		return new PreparedStatementWrapper(this, parent);
+	public PreparedStatementWrapper wrapPreparedStatement(ConnectionWrapper connectionWrapper, PreparedStatement parent) {
+		return new PreparedStatementWrapper(this, connectionWrapper, parent);
 	}
 	
-	public CallableStatementWrapper wrapCallableStatement(CallableStatement parent) {
-		return new CallableStatementWrapper(this, parent);
+	public CallableStatementWrapper wrapCallableStatement(ConnectionWrapper connectionWrapper, CallableStatement parent) {
+		return new CallableStatementWrapper(this, connectionWrapper, parent);
 	}
 	
 	public ResultSetWrapper wrapResultSet(@SuppressWarnings("unused") ResultSetType resultSetType, ResultSet parent) {

@@ -26,9 +26,9 @@ public class CallableStatementWrapper implements CallableStatement {
 	private final PreparedStatementWrapper preparedStatementWrapper;
 	private final CallableStatement parent;
 	
-	public CallableStatementWrapper(WrapperFactory wrapperFactory, CallableStatement parent) {
+	public CallableStatementWrapper(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, CallableStatement parent) {
 		this.wrapperFactory = wrapperFactory;
-		preparedStatementWrapper = wrapperFactory.wrapPreparedStatement(parent);
+		preparedStatementWrapper = wrapperFactory.wrapPreparedStatement(connectionWrapper, parent);
 		this.parent = parent;
 	}
 

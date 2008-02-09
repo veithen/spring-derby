@@ -25,9 +25,9 @@ public class PreparedStatementWrapper implements PreparedStatement {
 	private final StatementWrapper statementWrapper;
 	private final PreparedStatement parent;
 	
-	public PreparedStatementWrapper(WrapperFactory wrapperFactory, PreparedStatement parent) {
+	public PreparedStatementWrapper(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, PreparedStatement parent) {
 		this.wrapperFactory = wrapperFactory;
-		statementWrapper = wrapperFactory.wrapStatement(parent);
+		statementWrapper = wrapperFactory.wrapStatement(connectionWrapper, parent);
 		this.parent = parent;
 	}
 

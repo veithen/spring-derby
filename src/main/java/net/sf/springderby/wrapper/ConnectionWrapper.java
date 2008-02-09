@@ -74,28 +74,28 @@ public class ConnectionWrapper implements Connection {
 	/**
 	 * Delegate method for {@link Connection#createStatement()}.
 	 * This method wraps the {@link Statement} object using
-	 * {@link WrapperFactory#wrapStatement(Statement)}.
+	 * {@link WrapperFactory#wrapStatement(ConnectionWrapper, Statement)}.
 	 */
 	public Statement createStatement() throws SQLException {
-		return wrapperFactory.wrapStatement(parent.createStatement());
+		return wrapperFactory.wrapStatement(this, parent.createStatement());
 	}
 	
 	/**
 	 * Delegate method for {@link Connection#createStatement(int, int, int))}.
 	 * This method wraps the {@link Statement} object using
-	 * {@link WrapperFactory#wrapStatement(Statement)}.
+	 * {@link WrapperFactory#wrapStatement(ConnectionWrapper, Statement)}.
 	 */
 	public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-		return wrapperFactory.wrapStatement(parent.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability));
+		return wrapperFactory.wrapStatement(this, parent.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability));
 	}
 	
 	/**
 	 * Delegate method for {@link Connection#createStatement(int, int))}.
 	 * This method wraps the {@link Statement} object using
-	 * {@link WrapperFactory#wrapStatement(Statement)}.
+	 * {@link WrapperFactory#wrapStatement(ConnectionWrapper, Statement)}.
 	 */
 	public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
-		return wrapperFactory.wrapStatement(parent.createStatement(resultSetType, resultSetConcurrency));
+		return wrapperFactory.wrapStatement(this, parent.createStatement(resultSetType, resultSetConcurrency));
 	}
 	
 	/**
@@ -173,82 +173,82 @@ public class ConnectionWrapper implements Connection {
 	/**
 	 * Delegate method for {@link Connection#prepareCall(String, int, int, int)}.
 	 * This method wraps the {@link CallableStatement} object using
-	 * {@link WrapperFactory#wrapCallableStatement(CallableStatement)}.
+	 * {@link WrapperFactory#wrapCallableStatement(ConnectionWrapper, CallableStatement)}.
 	 */
 	public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-		return wrapperFactory.wrapCallableStatement(parent.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability));
+		return wrapperFactory.wrapCallableStatement(this, parent.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability));
 	}
 	
 	/**
 	 * Delegate method for {@link Connection#prepareCall(String, int, int)}.
 	 * This method wraps the {@link CallableStatement} object using
-	 * {@link WrapperFactory#wrapCallableStatement(CallableStatement)}.
+	 * {@link WrapperFactory#wrapCallableStatement(ConnectionWrapper, CallableStatement)}.
 	 */
 	public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-		return wrapperFactory.wrapCallableStatement(parent.prepareCall(sql, resultSetType, resultSetConcurrency));
+		return wrapperFactory.wrapCallableStatement(this, parent.prepareCall(sql, resultSetType, resultSetConcurrency));
 	}
 	
 	/**
 	 * Delegate method for {@link Connection#prepareCall(String)}.
 	 * This method wraps the {@link CallableStatement} object using
-	 * {@link WrapperFactory#wrapCallableStatement(CallableStatement)}.
+	 * {@link WrapperFactory#wrapCallableStatement(ConnectionWrapper, CallableStatement)}.
 	 */
 	public CallableStatement prepareCall(String sql) throws SQLException {
-		return wrapperFactory.wrapCallableStatement(parent.prepareCall(sql));
+		return wrapperFactory.wrapCallableStatement(this, parent.prepareCall(sql));
 	}
 	
 	/**
 	 * Delegate method for {@link Connection#prepareStatement(String, int, int, int)}.
 	 * This method wraps the {@link PreparedStatement} object using
-	 * {@link WrapperFactory#wrapPreparedStatement(PreparedStatement)}.
+	 * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement)}.
 	 */
 	public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-		return wrapperFactory.wrapPreparedStatement(parent.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability));
+		return wrapperFactory.wrapPreparedStatement(this, parent.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability));
 	}
 	
 	/**
 	 * Delegate method for {@link Connection#prepareStatement(String, int, int)}.
 	 * This method wraps the {@link PreparedStatement} object using
-	 * {@link WrapperFactory#wrapPreparedStatement(PreparedStatement)}.
+	 * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement)}.
 	 */
 	public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-		return wrapperFactory.wrapPreparedStatement(parent.prepareStatement(sql, resultSetType, resultSetConcurrency));
+		return wrapperFactory.wrapPreparedStatement(this, parent.prepareStatement(sql, resultSetType, resultSetConcurrency));
 	}
 	
 	/**
 	 * Delegate method for {@link Connection#prepareStatement(String, int)}.
 	 * This method wraps the {@link PreparedStatement} object using
-	 * {@link WrapperFactory#wrapPreparedStatement(PreparedStatement)}.
+	 * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement)}.
 	 */
 	public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
-		return wrapperFactory.wrapPreparedStatement(parent.prepareStatement(sql, autoGeneratedKeys));
+		return wrapperFactory.wrapPreparedStatement(this, parent.prepareStatement(sql, autoGeneratedKeys));
 	}
 	
 	/**
 	 * Delegate method for {@link Connection#prepareStatement(String, int[])}.
 	 * This method wraps the {@link PreparedStatement} object using
-	 * {@link WrapperFactory#wrapPreparedStatement(PreparedStatement)}.
+	 * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement)}.
 	 */
 	public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
-		return wrapperFactory.wrapPreparedStatement(parent.prepareStatement(sql, columnIndexes));
+		return wrapperFactory.wrapPreparedStatement(this, parent.prepareStatement(sql, columnIndexes));
 	}
 	
 	/**
 	 * Delegate method for {@link Connection#prepareStatement(String, String[])}.
 	 * This method wraps the {@link PreparedStatement} object using
-	 * {@link WrapperFactory#wrapPreparedStatement(PreparedStatement)}.
+	 * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement)}.
 	 */
 	public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
-		return wrapperFactory.wrapPreparedStatement(parent.prepareStatement(sql, columnNames));
+		return wrapperFactory.wrapPreparedStatement(this, parent.prepareStatement(sql, columnNames));
 	}
 	
 	/**
 	 * Delegate method for {@link Connection#prepareStatement(String)}.
 	 * This method wraps the {@link PreparedStatement} object using
-	 * {@link WrapperFactory#wrapPreparedStatement(PreparedStatement)}.
+	 * {@link WrapperFactory#wrapPreparedStatement(ConnectionWrapper, PreparedStatement)}.
 	 */
 	public PreparedStatement prepareStatement(String sql) throws SQLException {
-		return wrapperFactory.wrapPreparedStatement(parent.prepareStatement(sql));
+		return wrapperFactory.wrapPreparedStatement(this, parent.prepareStatement(sql));
 	}
 	
 	/**
