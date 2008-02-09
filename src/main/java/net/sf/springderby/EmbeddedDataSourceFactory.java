@@ -172,7 +172,7 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 	}
 
 	public Class<?> getObjectType() {
-		return EmbeddedDataSourceFactory.class;
+		return EmbeddedDataSource.class;
 	}
 
 	public boolean isSingleton() {
