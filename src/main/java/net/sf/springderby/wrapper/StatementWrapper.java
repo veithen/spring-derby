@@ -29,19 +29,11 @@ import java.sql.Statement;
  * @version $Id$
  */
 public class StatementWrapper implements Statement {
-	private final WrapperFactory wrapperFactory;
-	private final ConnectionWrapper connectionWrapper;
-	private final Statement parent;
+	private WrapperFactory wrapperFactory;
+	private ConnectionWrapper connectionWrapper;
+	private Statement parent;
 	
-	/**
-	 * Constructor.
-	 * 
-	 * @param wrapperFactory the {@link WrapperFactory} object that will be used
-	 *        to wrap {@link ResultSet} objects
-	 * @param connectionWrapper the {@link ConnectionWrapper} object that created this wrapper
-	 * @param parent the target {@link Statement} object this wrapper delegates to
-	 */
-	public StatementWrapper(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, Statement parent) {
+	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, Statement parent) {
 		this.wrapperFactory = wrapperFactory;
 		this.connectionWrapper = connectionWrapper;
 		this.parent = parent;

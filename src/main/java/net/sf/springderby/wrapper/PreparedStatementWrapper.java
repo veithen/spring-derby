@@ -21,11 +21,11 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 
 public class PreparedStatementWrapper implements PreparedStatement {
-	private final WrapperFactory wrapperFactory;
-	private final StatementWrapper statementWrapper;
-	private final PreparedStatement parent;
+	private WrapperFactory wrapperFactory;
+	private StatementWrapper statementWrapper;
+	private PreparedStatement parent;
 	
-	public PreparedStatementWrapper(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, PreparedStatement parent) {
+	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, PreparedStatement parent) {
 		this.wrapperFactory = wrapperFactory;
 		statementWrapper = wrapperFactory.wrapStatement(connectionWrapper, parent);
 		this.parent = parent;

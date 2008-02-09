@@ -20,10 +20,10 @@ import java.util.Calendar;
 import java.util.Map;
 
 public class ResultSetWrapper implements ResultSet {
-	private final ResultSet parent;
-
-	public ResultSetWrapper(ResultSet target) {
-		this.parent = target;
+	private ResultSet parent;
+	
+	final void init(ResultSet parent) {
+		this.parent = parent;
 	}
 	
 	/**

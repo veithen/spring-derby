@@ -1,26 +1,21 @@
 package net.sf.springderby.wrapper.trim;
 
-import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.sf.springderby.wrapper.ResultSetWrapper;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import net.sf.springderby.wrapper.ResultSetWrapper;
 
 public class TrimmingResultSetWrapper extends ResultSetWrapper {
 	private final static Log log = LogFactory.getLog(TrimmingResultSetWrapper.class);
 	
 	private Set<String> charColumns;
 	private boolean[] isCharColumn;
-	
-	public TrimmingResultSetWrapper(ResultSet target) {
-		super(target);
-	}
 	
 	private void fetchCharColumns() throws SQLException {
 		if (charColumns == null) {

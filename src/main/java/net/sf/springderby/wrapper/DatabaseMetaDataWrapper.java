@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DatabaseMetaDataWrapper implements DatabaseMetaData {
-	private final WrapperFactory wrapperFactory;
-	private final DatabaseMetaData parent;
+	private WrapperFactory wrapperFactory;
+	private DatabaseMetaData parent;
 	
-	public DatabaseMetaDataWrapper(WrapperFactory wrapperFactory, DatabaseMetaData parent) {
+	final void init(WrapperFactory wrapperFactory, DatabaseMetaData parent) {
 		this.wrapperFactory = wrapperFactory;
 		this.parent = parent;
 	}

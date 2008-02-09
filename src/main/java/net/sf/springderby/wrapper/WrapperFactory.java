@@ -8,27 +8,63 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class WrapperFactory {
-	public ConnectionWrapper wrapConnection(Connection parent) {
-		return new ConnectionWrapper(this, parent);
+	public ConnectionWrapper createConnectionWrapper() {
+		return new ConnectionWrapper();
 	}
 	
-	public DatabaseMetaDataWrapper wrapDatabaseMetaData(DatabaseMetaData parent) {
-		return new DatabaseMetaDataWrapper(this, parent);
+	final ConnectionWrapper wrapConnection(Connection parent) {
+		ConnectionWrapper wrapper = createConnectionWrapper();
+		wrapper.init(this, parent);
+		return wrapper;
 	}
 	
-	public StatementWrapper wrapStatement(ConnectionWrapper connectionWrapper, Statement parent) {
-		return new StatementWrapper(this, connectionWrapper, parent);
+	public DatabaseMetaDataWrapper createDatabaseMetaDataWrapper() {
+		return new DatabaseMetaDataWrapper();
 	}
 	
-	public PreparedStatementWrapper wrapPreparedStatement(ConnectionWrapper connectionWrapper, PreparedStatement parent) {
-		return new PreparedStatementWrapper(this, connectionWrapper, parent);
+	final DatabaseMetaDataWrapper wrapDatabaseMetaData(DatabaseMetaData parent) {
+		DatabaseMetaDataWrapper wrapper = createDatabaseMetaDataWrapper();
+		wrapper.init(this, parent);
+		return wrapper;
 	}
 	
-	public CallableStatementWrapper wrapCallableStatement(ConnectionWrapper connectionWrapper, CallableStatement parent) {
-		return new CallableStatementWrapper(this, connectionWrapper, parent);
+	public StatementWrapper createStatementWrapper() {
+		return new StatementWrapper();
 	}
 	
-	public ResultSetWrapper wrapResultSet(@SuppressWarnings("unused") ResultSetType resultSetType, ResultSet parent) {
-		return new ResultSetWrapper(parent);
+	final StatementWrapper wrapStatement(ConnectionWrapper connectionWrapper, Statement parent) {
+		StatementWrapper wrapper = createStatementWrapper();
+		wrapper.init(this, connectionWrapper, parent);
+		return wrapper;
+	}
+	
+	public PreparedStatementWrapper createPreparedStatementWrapper() {
+		return new PreparedStatementWrapper();
+	}
+	
+	final PreparedStatementWrapper wrapPreparedStatement(ConnectionWrapper connectionWrapper, PreparedStatement parent) {
+		PreparedStatementWrapper wrapper = createPreparedStatementWrapper();
+		wrapper.init(this, connectionWrapper, parent);
+		return wrapper;
+	}
+	
+	public CallableStatementWrapper createCallableStatementWrapper() {
+		return new CallableStatementWrapper();
+	}
+	
+	final CallableStatementWrapper wrapCallableStatement(ConnectionWrapper connectionWrapper, CallableStatement parent) {
+		CallableStatementWrapper wrapper = createCallableStatementWrapper();
+		wrapper.init(this, connectionWrapper, parent);
+		return wrapper;
+	}
+	
+	public ResultSetWrapper createResultSetWrapper(@SuppressWarnings("unused") ResultSetType resultSetType) {
+		return new ResultSetWrapper();
+	}
+	
+	final ResultSetWrapper wrapResultSet(ResultSetType resultSetType, ResultSet parent) {
+		ResultSetWrapper wrapper = createResultSetWrapper(resultSetType);
+		wrapper.init(parent);
+		return wrapper;
 	}
 }

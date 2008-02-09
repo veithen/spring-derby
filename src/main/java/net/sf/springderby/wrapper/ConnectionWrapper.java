@@ -27,25 +27,17 @@ import java.util.Map;
  * Base class for {@link Connection} wrappers.
  * All methods delegate to the target {@link Connection} object. Returned
  * {@link DatabaseMetaData}, {@link Statement}, {@link PreparedStatement} and
- * {@link CallableStatement} objects are wrapped using the provided {@link WrapperFactory}
- * object.
+ * {@link CallableStatement} objects are wrapped using the {@link WrapperFactory}
+ * object that created the {@link ConnectionWrapper}.
  * 
  * @author Andreas Veithen
  * @version $Id$
  */
 public class ConnectionWrapper implements Connection {
-	private final WrapperFactory wrapperFactory;
-	private final Connection parent;
+	private WrapperFactory wrapperFactory;
+	private Connection parent;
 	
-	/**
-	 * Constructor.
-	 * 
-	 * @param wrapperFactory the {@link WrapperFactory} object that will be used
-	 *        to wrap {@link DatabaseMetaData}, {@link Statement}, {@link PreparedStatement} and
-	 *        {@link CallableStatement} objects
-	 * @param parent the target {@link Connection} object this wrapper delegates to
-	 */
-	public ConnectionWrapper(WrapperFactory wrapperFactory, Connection parent) {
+	final void init(WrapperFactory wrapperFactory, Connection parent) {
 		this.wrapperFactory = wrapperFactory;
 		this.parent = parent;
 	}

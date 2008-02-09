@@ -22,11 +22,11 @@ import java.util.Calendar;
 import java.util.Map;
 
 public class CallableStatementWrapper implements CallableStatement {
-	private final WrapperFactory wrapperFactory;
-	private final PreparedStatementWrapper preparedStatementWrapper;
-	private final CallableStatement parent;
+	private WrapperFactory wrapperFactory;
+	private PreparedStatementWrapper preparedStatementWrapper;
+	private CallableStatement parent;
 	
-	public CallableStatementWrapper(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, CallableStatement parent) {
+	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, CallableStatement parent) {
 		this.wrapperFactory = wrapperFactory;
 		preparedStatementWrapper = wrapperFactory.wrapPreparedStatement(connectionWrapper, parent);
 		this.parent = parent;
