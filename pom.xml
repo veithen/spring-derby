@@ -40,7 +40,8 @@
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
-			<version>10.1.1.0</version>
+			<!-- version>10.1.1.0</version -->
+			<version>10.2.1.6</version> <!-- ij.runScript only exists beginning with this version of Derby -->
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>

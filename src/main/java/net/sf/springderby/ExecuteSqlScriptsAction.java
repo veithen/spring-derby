@@ -16,6 +16,7 @@ package net.sf.springderby;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -59,6 +60,10 @@ public class ExecuteSqlScriptsAction implements OnlineAction, ConnectionCallback
 	 */
 	public void setScripts(List<Resource> scripts) {
 		this.scripts = scripts;
+	}
+	
+	public void setScript(Resource script) {
+		this.scripts = Collections.singletonList(script);
 	}
 
 	public void execute(OnlineActionContext context) throws Exception {

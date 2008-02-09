@@ -15,9 +15,13 @@ package net.sf.springderby;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 import javax.sql.DataSource;
+
+import net.sf.springderby.wrapper.DataSourceWrapper;
+import net.sf.springderby.wrapper.trim.TrimmingWrapperFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -59,10 +63,10 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 	
 	private final Log log = LogFactory.getLog(EmbeddedDataSourceFactory.class);
 	
-	private boolean create;
-	
 	private String databaseName;
 	private String user;
+	private boolean create;
+	private boolean trimChar;
 	private List<OfflineAction> beforeStartupActions;
 	private List<OnlineAction> afterCreationActions;
 	private List<OfflineAction> afterShutdownActions;
@@ -79,17 +83,33 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 	public void setCreate(boolean create) {
 		this.create = create;
 	}
+	
+	public void setTrimChar(boolean trimChar) {
+		this.trimChar = trimChar;
+	}
 
 	public void setBeforeStartupActions(List<OfflineAction> beforeStartupActions) {
 		this.beforeStartupActions = beforeStartupActions;
 	}
 	
+	public void setBeforeStartupAction(OfflineAction beforeStartupAction) {
+		this.beforeStartupActions = Collections.singletonList(beforeStartupAction);
+	}
+	
 	public void setAfterCreationActions(List<OnlineAction> afterCreationActions) {
 		this.afterCreationActions = afterCreationActions;
+	}
+	
+	public void setAfterCreationAction(OnlineAction afterCreationAction) {
+		this.afterCreationActions = Collections.singletonList(afterCreationAction);
 	}
 
 	public void setAfterShutdownActions(List<OfflineAction> afterShutdownActions) {
 		this.afterShutdownActions = afterShutdownActions;
+	}
+	
+	public void setAfterShutdownAction(OfflineAction afterShutdownAction) {
+		this.afterShutdownActions = Collections.singletonList(afterShutdownAction);
 	}
 	
 	private void executeOfflineActions(List<OfflineAction> actions) throws Exception {
@@ -172,7 +192,7 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 	}
 
 	public Class<?> getObjectType() {
-		return EmbeddedDataSource.class;
+		return DataSource.class;
 	}
 
 	public boolean isSingleton() {
@@ -180,6 +200,6 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 	}
 
 	public Object getObject() throws Exception {
-		return dataSource;
+		return trimChar ? new DataSourceWrapper(new TrimmingWrapperFactory(), dataSource) : dataSource;
 	}
 }

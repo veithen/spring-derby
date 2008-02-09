@@ -14,11 +14,17 @@
 package net.sf.springderby;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import javax.sql.DataSource;
+
+import junit.framework.TestCase;
 
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import junit.framework.TestCase;
+import org.springframework.core.io.ClassPathResource;
 
 public class EmbeddedDataSourceFactoryTest extends TestCase {
 	/**
@@ -32,6 +38,44 @@ public class EmbeddedDataSourceFactoryTest extends TestCase {
 		}
 		catch (BeanCreationException ex) {
 			assertFalse(new File("target/failureTestDB").exists());
+		}
+	}
+	
+	public void testTrimChar() throws Exception {
+		EmbeddedDataSourceFactory factory = new EmbeddedDataSourceFactory();
+		factory.setDatabaseName("target/testDB");
+		factory.setUser("test");
+		factory.setCreate(true);
+		factory.setTrimChar(true);
+		factory.setBeforeStartupAction(new DeleteDatabaseAction());
+		ExecuteSqlScriptsAction action = new ExecuteSqlScriptsAction();
+		action.setScript(new ClassPathResource("/net/sf/springderby/trimCharTest.sql"));
+		factory.setAfterCreationAction(action);
+		factory.setAfterShutdownAction(new DeleteDatabaseAction());
+		factory.afterPropertiesSet();
+		try {
+			DataSource dataSource = (DataSource)factory.getObject();
+			Connection connection = dataSource.getConnection();
+			try {
+				Statement statement = connection.createStatement();
+				try {
+					ResultSet rs = statement.executeQuery("SELECT * FROM TEST");
+					rs.next();
+					assertEquals("test", rs.getString(2));
+					assertEquals("test", rs.getString("CHAR_COL"));
+					assertEquals("test", rs.getObject(2));
+					assertEquals("test", rs.getObject("CHAR_COL"));
+				}
+				finally {
+					statement.close();
+				}
+			}
+			finally {
+				connection.close();
+			}
+		}
+		finally {
+			factory.destroy();
 		}
 	}
 }
