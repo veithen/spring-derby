@@ -11,6 +11,7 @@ import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ParameterMetaData;
+import java.sql.PreparedStatement;
 import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -26,12 +27,21 @@ public class CallableStatementWrapper implements CallableStatement {
 	private PreparedStatementWrapper preparedStatementWrapper;
 	private CallableStatement parent;
 	
-	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, CallableStatement parent) {
+	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, CallableStatement parent, String sql) {
 		this.wrapperFactory = wrapperFactory;
-		preparedStatementWrapper = wrapperFactory.wrapPreparedStatement(connectionWrapper, parent);
+		preparedStatementWrapper = wrapperFactory.wrapPreparedStatement(connectionWrapper, parent, sql);
 		this.parent = parent;
 	}
-
+	
+	/**
+	 * Get the SQL statement used to construct the {@link PreparedStatement} object. 
+	 * 
+	 * @return the SQL statement
+	 */
+	protected final String getSql() {
+		return preparedStatementWrapper.getSql();
+	}
+	
 	public void addBatch() throws SQLException {
 		preparedStatementWrapper.addBatch();
 	}

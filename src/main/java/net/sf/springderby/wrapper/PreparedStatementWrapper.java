@@ -24,13 +24,24 @@ public class PreparedStatementWrapper implements PreparedStatement {
 	private WrapperFactory wrapperFactory;
 	private StatementWrapper statementWrapper;
 	private PreparedStatement parent;
+	private String sql;
 	
-	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, PreparedStatement parent) {
+	final void init(WrapperFactory wrapperFactory, ConnectionWrapper connectionWrapper, PreparedStatement parent, String sql) {
 		this.wrapperFactory = wrapperFactory;
 		statementWrapper = wrapperFactory.wrapStatement(connectionWrapper, parent);
 		this.parent = parent;
+		this.sql = sql;
 	}
-
+	
+	/**
+	 * Get the SQL statement used to construct the {@link PreparedStatement} object. 
+	 * 
+	 * @return the SQL statement
+	 */
+	protected final String getSql() {
+		return sql;
+	}
+	
 	public void addBatch(String sql) throws SQLException {
 		statementWrapper.addBatch(sql);
 	}

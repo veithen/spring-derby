@@ -42,9 +42,9 @@ public class WrapperFactory {
 		return new PreparedStatementWrapper();
 	}
 	
-	final PreparedStatementWrapper wrapPreparedStatement(ConnectionWrapper connectionWrapper, PreparedStatement parent) {
+	final PreparedStatementWrapper wrapPreparedStatement(ConnectionWrapper connectionWrapper, PreparedStatement parent, String sql) {
 		PreparedStatementWrapper wrapper = createPreparedStatementWrapper();
-		wrapper.init(this, connectionWrapper, parent);
+		wrapper.init(this, connectionWrapper, parent, sql);
 		return wrapper;
 	}
 	
@@ -52,9 +52,9 @@ public class WrapperFactory {
 		return new CallableStatementWrapper();
 	}
 	
-	final CallableStatementWrapper wrapCallableStatement(ConnectionWrapper connectionWrapper, CallableStatement parent) {
+	final CallableStatementWrapper wrapCallableStatement(ConnectionWrapper connectionWrapper, CallableStatement parent, String sql) {
 		CallableStatementWrapper wrapper = createCallableStatementWrapper();
-		wrapper.init(this, connectionWrapper, parent);
+		wrapper.init(this, connectionWrapper, parent, sql);
 		return wrapper;
 	}
 	
