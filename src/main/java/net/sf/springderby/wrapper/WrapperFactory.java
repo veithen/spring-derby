@@ -22,9 +22,9 @@ public class WrapperFactory {
 		return new DatabaseMetaDataWrapper();
 	}
 	
-	final DatabaseMetaDataWrapper wrapDatabaseMetaData(DatabaseMetaData parent) {
+	final DatabaseMetaDataWrapper wrapDatabaseMetaData(ConnectionWrapper connectionWrapper, DatabaseMetaData parent) {
 		DatabaseMetaDataWrapper wrapper = createDatabaseMetaDataWrapper();
-		wrapper.init(this, parent);
+		wrapper.init(connectionWrapper, parent);
 		return wrapper;
 	}
 	

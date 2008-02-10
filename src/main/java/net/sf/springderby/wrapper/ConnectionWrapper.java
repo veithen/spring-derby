@@ -117,7 +117,7 @@ public class ConnectionWrapper implements Connection {
 	 * {@link WrapperFactory#wrapDatabaseMetaData(DatabaseMetaData)}.
 	 */
 	public DatabaseMetaData getMetaData() throws SQLException {
-		return wrapperFactory.wrapDatabaseMetaData(parent.getMetaData());
+		return wrapperFactory.wrapDatabaseMetaData(this, parent.getMetaData());
 	}
 	
 	/**
