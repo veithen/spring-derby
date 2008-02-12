@@ -20,9 +20,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import net.sf.springderby.wrapper.DataSourceWrapper;
-import net.sf.springderby.wrapper.trim.TrimmingWrapperFactory;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.derby.jdbc.EmbeddedDataSource;
@@ -66,7 +63,6 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 	private String databaseName;
 	private String user;
 	private boolean create;
-	private boolean trimChar;
 	private List<OfflineAction> beforeStartupActions;
 	private List<OnlineAction> afterCreationActions;
 	private List<OfflineAction> afterShutdownActions;
@@ -84,10 +80,6 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 		this.create = create;
 	}
 	
-	public void setTrimChar(boolean trimChar) {
-		this.trimChar = trimChar;
-	}
-
 	public void setBeforeStartupActions(List<OfflineAction> beforeStartupActions) {
 		this.beforeStartupActions = beforeStartupActions;
 	}
@@ -192,7 +184,7 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 	}
 
 	public Class<?> getObjectType() {
-		return DataSource.class;
+		return EmbeddedDataSource.class;
 	}
 
 	public boolean isSingleton() {
@@ -200,6 +192,6 @@ public class EmbeddedDataSourceFactory implements InitializingBean, DisposableBe
 	}
 
 	public Object getObject() throws Exception {
-		return trimChar ? new DataSourceWrapper(new TrimmingWrapperFactory(), dataSource) : dataSource;
+		return dataSource;
 	}
 }
