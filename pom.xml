@@ -176,10 +176,12 @@
 	<distributionManagement>
 		<!-- Use "mvn site:deploy" to upload -->
 		<site>
+			<id>spring-derby-site</id>
 			<url>scp://shell.sf.net/home/groups/s/sp/spring-derby/htdocs/</url>
 		</site>
 		<!-- Use "mvn deploy" to upload -->
 		<snapshotRepository>
+			<id>spring-derby-snapshot-repository</id>
 			<url>scpexe://shell.sf.net/home/groups/s/sp/spring-derby/htdocs/repository/</url>
 		</snapshotRepository>
 	</distributionManagement>
