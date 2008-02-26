@@ -3,12 +3,14 @@ package net.sf.springderby.proc;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.springderby.OnlineAction;
 import net.sf.springderby.OnlineActionContext;
 import net.sf.springderby.proc.annotation.Function;
+import net.sf.springderby.proc.annotation.Procedure;
 
 public class DeclareProceduresAction implements OnlineAction {
 	private final static Map<Class<?>,String> typeMap = new HashMap<Class<?>,String>();
@@ -64,6 +66,33 @@ public class DeclareProceduresAction implements OnlineAction {
 					buffer.append(functionAnnotation.dataAccessLevel().getSql());
 					buffer.append(" ");
 					buffer.append(functionAnnotation.onNullInput().getSql());
+					context.getJdbcTemplate().execute(buffer.toString());
+					found = true;
+				}
+				Procedure procedureAnnotation = method.getAnnotation(Procedure.class);
+				if (procedureAnnotation != null) {
+					StringBuilder buffer = new StringBuilder("CREATE PROCEDURE ");
+					buffer.append(procedureAnnotation.name());
+					buffer.append(" (");
+					int resultSetCount = 0;
+					Class<?>[] parameterTypes = method.getParameterTypes();
+					for (int i = 0; i < parameterTypes.length; i++) {
+						// TODO: handle "real" procedure parameters
+						Class<?> parameterType = parameterTypes[i];
+						if (parameterType.isArray() && parameterType.getComponentType().equals(ResultSet.class)) {
+							resultSetCount++;
+						}
+					}
+					buffer.append(") LANGUAGE JAVA EXTERNAL NAME '");
+					buffer.append(clazz.getName());
+					buffer.append(".");
+					buffer.append(method.getName());
+					buffer.append("' PARAMETER STYLE JAVA ");
+					buffer.append(procedureAnnotation.dataAccessLevel().getSql());
+					if (resultSetCount > 0) {
+						buffer.append(" DYNAMIC RESULT SETS ");
+						buffer.append(resultSetCount);
+					}
 					context.getJdbcTemplate().execute(buffer.toString());
 					found = true;
 				}
