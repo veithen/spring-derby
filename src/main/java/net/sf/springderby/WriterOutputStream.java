@@ -13,7 +13,9 @@
  */
 package net.sf.springderby;
 
+import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -21,46 +23,32 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 
-import org.apache.commons.logging.Log;
-
 /**
- * {@link OutputStream} implementation that redirects to a logger.
+ * {@link OutputStream} implementation that redirects to a {@link Writer}.
  * 
  * @author Andreas Veithen
  * @version $Id$
  */
-public class LoggerOutputStream extends OutputStream {
-	private final Log log;
+public class WriterOutputStream extends OutputStream {
+	private final Writer writer;
 	private final CharsetDecoder decoder;
-	private final String endOfLine;
 	private final ByteBuffer decoderIn = ByteBuffer.allocate(128);
 	private final CharBuffer decoderOut = CharBuffer.allocate(128);
-	private final StringBuffer lineBuffer = new StringBuffer();
-	private int endOfLineMatch;
 	
-	public LoggerOutputStream(Log log, Charset charset, String endOfLine) {
-		this.log = log;
+	public WriterOutputStream(Writer writer, Charset charset) {
+		this.writer = writer;
 		decoder = charset.newDecoder();
 		decoder.onMalformedInput(CodingErrorAction.REPLACE);
 		decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
 		decoder.replaceWith("?");
-		this.endOfLine = endOfLine;
 	}
 
-	public LoggerOutputStream(Log log, Charset charset) {
-		this(log, charset, System.getProperty( "line.separator" ));
-	}
-
-	public LoggerOutputStream(Log log, String charset, String endOfLine) {
-		this(log, Charset.forName(charset), endOfLine);
-	}
-	
-	public LoggerOutputStream(Log log, String charset) {
-		this(log, Charset.forName(charset));
+	public WriterOutputStream(Writer writer, String charset) {
+		this(writer, Charset.forName(charset));
 	}
 	
 	@Override
-	public void write(byte[] bytes, int offset, int length) {
+	public void write(byte[] bytes, int offset, int length) throws IOException {
 		while (length > 0) {
 			int c = Math.min(length, decoderIn.remaining());
 			decoderIn.put(bytes, offset, c);
@@ -71,55 +59,31 @@ public class LoggerOutputStream extends OutputStream {
 	}
 
 	@Override
-	public void write(byte[] bytes) {
+	public void write(byte[] bytes) throws IOException {
 		write(bytes, 0, bytes.length);
 	}
 
 	@Override
-	public void write(int b) {
+	public void write(int b) throws IOException {
 		write(new byte[] { (byte)b }, 0, 1);
 	}
 	
 	@Override
-	public void close() {
+	public void close() throws IOException {
 		processInput(true);
-		if (lineBuffer.length() > 0) {
-			flushLineBuffer();
-		}
+		writer.close();
 	}
 	
-	private void processInput(boolean endOfInput) {
+	private void processInput(boolean endOfInput) throws IOException {
 		decoderIn.flip();
 		CoderResult coderResult;
 		do {
 			coderResult = decoder.decode(decoderIn, decoderOut, endOfInput);
 			// The decoder is configured to replace malformed input and unmappable characters
 			assert !coderResult.isError();
-			int outLength = decoderOut.position();
-			char[] outArray = decoderOut.array();
-			int start = 0;
-			for (int i=0; i<outLength; i++) {
-				if (outArray[i] == endOfLine.charAt(endOfLineMatch)) {
-					endOfLineMatch++;
-					if (endOfLineMatch == endOfLine.length()) {
-						lineBuffer.append(outArray, start, i-start+1);
-						lineBuffer.setLength(lineBuffer.length()-endOfLine.length());
-						flushLineBuffer();
-						start = i+1;
-						endOfLineMatch = 0;
-					}
-				} else {
-					endOfLineMatch = 0;
-				}
-			}
-			lineBuffer.append(outArray, start, outLength-start);
+			writer.write(decoderOut.array(), 0, decoderOut.position());
 			decoderOut.rewind();
 		} while (coderResult.isOverflow());
 		decoderIn.compact();
-	}
-	
-	private void flushLineBuffer() {
-		log.info(lineBuffer.toString());
-		lineBuffer.setLength(0);
 	}
 }

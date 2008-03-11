@@ -1,11 +1,10 @@
 package net.sf.springderby;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.Writer;
 
 import junit.framework.TestCase;
 
-public class LoggerOutputStreamTest extends TestCase {
+public class LoggerWriterTest extends TestCase {
 	private final static String[] testStrings =
 		{
 			"Vestibulum semper. Nullam non odio. Aliquam quam.",
@@ -21,10 +20,10 @@ public class LoggerOutputStreamTest extends TestCase {
 	
 	public void testEndOfLine(String endOfLine) throws Exception {
 		TestLog log = new TestLog();
-		PrintWriter out = new PrintWriter(new OutputStreamWriter(new LoggerOutputStream(log, "UTF-8", endOfLine), "UTF-8"), false);
+		Writer out = new LoggerWriter(log, endOfLine);
 		for (int i=0; i<testStrings.length; i++) {
-			out.print(testStrings[i]);
-			out.print(endOfLine);
+			out.write(testStrings[i]);
+			out.write(endOfLine);
 		}
 		out.close();
 		for (int i=0; i<testStrings.length; i++) {
@@ -43,20 +42,12 @@ public class LoggerOutputStreamTest extends TestCase {
 	
 	public void testNoEndOfLineOnLastLine() throws Exception {
 		TestLog log = new TestLog();
-		PrintWriter out = new PrintWriter(new OutputStreamWriter(new LoggerOutputStream(log, "UTF-8", "\n"), "UTF-8"), false);
-		out.print("TEST1\n");
-		out.print("TEST2");
+		Writer out = new LoggerWriter(log, "\n");
+		out.write("TEST1\n");
+		out.write("TEST2");
 		out.close();
 		assertEquals("TEST1", log.pop());
 		assertEquals("TEST2", log.pop());
 		assertFalse(log.hasMessages());
-	}
-	
-	public void testUndecodable() throws Exception {
-		TestLog log = new TestLog();
-		LoggerOutputStream out = new LoggerOutputStream(log, "ASCII", "\n");
-		out.write(new byte[] { 'A', -1, 'B', '\n' });
-		out.close();
-		assertEquals("A?B", log.pop());
 	}
 }

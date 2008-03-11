@@ -15,6 +15,7 @@ package net.sf.springderby;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -39,7 +40,7 @@ public class IjSqlScriptExecutor implements SqlScriptExecutor {
 	public void executeScript(Connection connection, Resource script, String encoding) throws SQLException, DataAccessException, IOException {
 		InputStream in = script.getInputStream();
 		try {
-			LoggerOutputStream out = new LoggerOutputStream(log, "UTF-8");
+			OutputStream out = new WriterOutputStream(new LoggerWriter(log), "UTF-8");
 			try {
 				// runScript returns the number of SQLExceptions thrown during the execution
 				if (ij.runScript(connection, in, encoding, out, "UTF-8") > 0) {
